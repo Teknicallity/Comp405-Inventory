@@ -1,0 +1,13 @@
+version: "3"
+services:
+  comp405-inventory:
+    ports:
+      - "8198:8198"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "changeme"
+#  mysql-inventory:
+#    image: "mysql/mysql-server:8.0.40-bookworm"
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: "changeme"

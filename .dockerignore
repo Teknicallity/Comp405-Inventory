@@ -1,0 +1,8 @@
+*
+
+!/app
+!/inventory-system.py
+!/requirements.txt
+!/setup-inventory.sql
+!/start.sh
+!/uwsgi.ini
