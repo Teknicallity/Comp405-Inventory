@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS statuses;
 DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS checkouts;
 DROP TABLE IF EXISTS documentation;
+DROP TABLE IF EXISTS qrcodes;
 
 
 CREATE TABLE items
@@ -62,4 +63,16 @@ CREATE TABLE documentation
     description TEXT,
     item_id INTEGER,
     FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE
+);
+
+CREATE TABLE qrcodes
+(
+    qrcode_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_id INTEGER,
+    uuid TEXT,
+    created_date TIMESTAMP,
+    last_used_date TIMESTAMP,
+    created_by INTEGER,
+    FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE cascade,
+    FOREIGN KEY (created_by) REFERENCES employees (employee_id) ON DELETE set null
 );
