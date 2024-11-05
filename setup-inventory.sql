@@ -24,13 +24,13 @@ CREATE TABLE items
 CREATE TABLE locations
 (
     location_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT PRIMARY KEY not null
 );
 
 CREATE TABLE statuses
 (
     status_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT
+    name TEXT PRIMARY KEY not null
 );
 
 CREATE TABLE employees
