@@ -1,6 +1,4 @@
 
-CREATE DATABASE IF NOT EXISTS inventory_system;
-
 USE inventory_system;
 
 DROP TABLE IF EXISTS items;
@@ -70,3 +68,5 @@ CREATE TABLE qrcodes (
     FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES employees (employee_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
+
+INSERT INTO items (name) VALUES ('test tool')
