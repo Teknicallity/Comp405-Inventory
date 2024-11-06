@@ -11,8 +11,8 @@ def create_app():
 
     csrf.init_app(app)
 
-    from db import flask_setup as db_setup
-    db_setup.init_app(app)
+    from db import connection as db_connection
+    db_connection.init_app(app)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

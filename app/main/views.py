@@ -1,5 +1,5 @@
 from app.main import main
-from db.flask_setup import get_db
+from db.models.item_model import get_all_items
 from flask import jsonify
 
 @main.route('/')
@@ -7,10 +7,6 @@ def index():
     return 'Hello World!'
 
 @main.route('/items')
-def about():
-    db = get_db()
-    with db.cursor() as cursor:
-        cursor.execute("SELECT * FROM items")
-        items = cursor.fetchall()
-    print(items)
+def all_items():
+    items = get_all_items()
     return jsonify(items)
