@@ -4,4 +4,4 @@
 
 ## How to Run
 ### For Development
-In this project directory, run `flask --app inventory-system run`
+In this project directory, run `flask --app inventory-system --debug run`
