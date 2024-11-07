@@ -51,9 +51,8 @@ CREATE TABLE documentation (
 ) ENGINE=InnoDB;
 
 CREATE TABLE qrcodes (
-    qrcode_id INT AUTO_INCREMENT PRIMARY KEY,
+    uuid CHAR(36) PRIMARY KEY ,
     item_id INT,
-    uuid CHAR(36),
     created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     last_used_date TIMESTAMP NULL,
     created_by INT,
