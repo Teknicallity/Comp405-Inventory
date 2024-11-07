@@ -19,6 +19,9 @@ class ProdConfig(BaseConfig):
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', 'your_password')
     MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE', 'your_db')
 
+    ADMIN_USER = os.environ.get('ADMIN_USER', None)
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', None)
+
     @classmethod
     def init_app(cls, app):
         BaseConfig.init_app(app)
