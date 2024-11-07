@@ -1,5 +1,27 @@
+from flask_login import UserMixin
+
 from db.connection import get_db
 from app import bcrypt
+
+
+class User(UserMixin):
+    def __init__(self, username, password_hash, is_admin, employee_id=None):
+        self.username = username
+        self.password_hash = password_hash
+        self.is_admin = is_admin
+        self.employee_id = employee_id
+
+    def get_id(self):
+        return self.username
+
+    @classmethod
+    def from_db_row(cls, row):
+        return cls(
+            username=row[1],
+            password_hash=row[2],
+            is_admin=row[3],
+            employee_id=row[4]
+        )
 
 
 def add_user(username, password, is_admin, employee_id=None):
@@ -18,6 +40,14 @@ def user_exists(username):
     with db.cursor() as cursor:
         cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
         return cursor.fetchone() is not None
+
+
+def get_user_by_username(username) -> User:
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+        row = cursor.fetchone()
+        return User.from_db_row(row) if row else None
 
 
 def get_admin_status(username):
