@@ -63,30 +63,6 @@ def _execute_sql_file(db, filepath):
                     cursor.execute(command)
 
 
-@click.command('init-db')
-@click.option('--reset', '-r', is_flag=True, default=False,
-              help='Reset the database to a clean state before initialization')
-def init_db_command(reset):
-    """Command-line command to initialize the database."""
-    if reset:
-        _destroy_database()
-        click.echo('Database deleted.')
-
-    _create_database()
-
-    try:
-        _apply_db_schema()
-    except OperationalError:
-        click.echo('Pass -r or --reset flag to reset database.')
-    else:
-        click.echo('Initialized the database.')
-
-
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-
-
 def _execute_db_command(command):
     """Execute a SQL command on the server connection without a specific database."""
     with _get_db_server() as connection:
