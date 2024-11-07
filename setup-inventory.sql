@@ -22,9 +22,9 @@ CREATE TABLE employees (
 
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50),
+    username VARCHAR(50) UNIQUE,
     password_hash VARCHAR(250),
-    is_admin BOOL,
+    is_admin BOOL DEFAULT 0,
     employee_id INT,
     FOREIGN KEY (employee_id) REFERENCES employees (employee_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
