@@ -6,9 +6,9 @@ class DevConfig(BaseConfig):
 
     MYSQL_HOST = 'localhost'
     MYSQL_PORT = 3306
-    MYSQL_USER = 'developer'
+    MYSQL_USER = 'root'
     MYSQL_PASSWORD = 'password'
-    MYSQL_DATABASE = 'inventory'
+    MYSQL_DATABASE = 'inventory_system'
 
     @classmethod
     def init_app(cls, app):

@@ -1,15 +1,5 @@
 
-CREATE DATABASE IF NOT EXISTS inventory_system;
-
 USE inventory_system;
-
-DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS locations;
-DROP TABLE IF EXISTS statuses;
-DROP TABLE IF EXISTS employees;
-DROP TABLE IF EXISTS checkouts;
-DROP TABLE IF EXISTS documentation;
-DROP TABLE IF EXISTS qrcodes;
 
 CREATE TABLE locations (
     location_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,12 +51,13 @@ CREATE TABLE documentation (
 ) ENGINE=InnoDB;
 
 CREATE TABLE qrcodes (
-    qrcode_id INT AUTO_INCREMENT PRIMARY KEY,
+    uuid CHAR(36) PRIMARY KEY ,
     item_id INT,
-    uuid CHAR(36),
     created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     last_used_date TIMESTAMP NULL,
     created_by INT,
     FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES employees (employee_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
+
+INSERT INTO items (name) VALUES ('test tool')
