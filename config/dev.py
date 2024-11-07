@@ -10,6 +10,9 @@ class DevConfig(BaseConfig):
     MYSQL_PASSWORD = 'password'
     MYSQL_DATABASE = 'inventory_system'
 
+    ADMIN_USER = 'root'
+    ADMIN_PASSWORD = 'password'
+
     @classmethod
     def init_app(cls, app):
         BaseConfig.init_app(app)

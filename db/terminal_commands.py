@@ -1,8 +1,9 @@
 import click
 from pymysql import OperationalError
+from flask import current_app
 
 from db.connection import _destroy_database, _create_database, _apply_db_schema
-from db.models.user_model import add_user
+from db.models.user_model import add_user, user_exists
 
 
 @click.command('init-db')
@@ -30,3 +31,15 @@ def create_admin_command(username):
     password = click.prompt('Password', hide_input=True, confirmation_prompt=True)
 
     add_user(username, password, is_admin=True)
+
+
+@click.command('ensure-admin')
+def ensure_admin():
+    if current_app.config['ADMIN_USER']:
+        if not user_exists(current_app.config['ADMIN_USER']):
+            add_user(current_app.config['ADMIN_USER'], current_app.config['ADMIN_PASSWORD'], True)
+            click.echo(f'Created admin user "{current_app.config['ADMIN_USER']}" from environment')
+        else:
+            click.echo('Environment defined admin user exists')
+    else:
+        click.echo('Environment admin user not defined')

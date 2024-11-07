@@ -12,3 +12,9 @@ def add_user(username, password, is_admin, employee_id=None):
         )
     db.commit()
 
+
+def user_exists(username):
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+        return cursor.fetchone() is not None
