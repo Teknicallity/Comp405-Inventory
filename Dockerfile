@@ -14,14 +14,7 @@ RUN mkdir /etc/comp405-inventory/.venv && \
     /etc/comp405-inventory/.venv/bin/pip install --upgrade pip wheel && \
     /etc/comp405-inventory/.venv/bin/pip install -r requirements.txt
 
-#RUN pip3 install --no-cache-dir -r requirements.txt
-
 COPY . .
-
-#VOLUME /etc/comp405-inventory/config
-#VOLUME /etc/comp405-inventory/media
-
-#RUN mkdir -p /etc/comp405-inventory/config && chmod -R 777 /etc/comp405-inventory/config
 
 EXPOSE 8198
 

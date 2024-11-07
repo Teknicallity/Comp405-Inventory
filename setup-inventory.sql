@@ -1,14 +1,6 @@
 
 USE inventory_system;
 
-DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS locations;
-DROP TABLE IF EXISTS statuses;
-DROP TABLE IF EXISTS employees;
-DROP TABLE IF EXISTS checkouts;
-DROP TABLE IF EXISTS documentation;
-DROP TABLE IF EXISTS qrcodes;
-
 CREATE TABLE locations (
     location_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
