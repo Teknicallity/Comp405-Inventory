@@ -6,8 +6,8 @@ import pymysql
 from flask import current_app, g
 from pymysql import OperationalError
 
-MAX_RETRIES = 5
-RETRY_DELAY = 2
+MAX_RETRIES = 10
+RETRY_DELAY = 5
 
 
 def _connect_to_db(with_db_name=True):
