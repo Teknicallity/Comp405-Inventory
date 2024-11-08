@@ -28,6 +28,7 @@ def init_db_command(reset):
 @click.command('create-admin')
 @click.option('--username', '-u', prompt='Admin Username', help='Admin Username')
 def create_admin_command(username):
+    """Creates a user with admin privileges."""
     password = click.prompt('Password', hide_input=True, confirmation_prompt=True)
 
     add_user(username, password, is_admin=True)
@@ -35,6 +36,7 @@ def create_admin_command(username):
 
 @click.command('ensure-admin')
 def ensure_admin():
+    """Creates an admin user from config or environment variables if user doesn't exist'."""
     if current_app.config['ADMIN_USER']:
         if not user_exists(current_app.config['ADMIN_USER']):
             add_user(current_app.config['ADMIN_USER'], current_app.config['ADMIN_PASSWORD'], True)
