@@ -1,3 +1,5 @@
+import sys
+
 import click
 from pymysql import OperationalError
 from flask import current_app
@@ -11,15 +13,21 @@ from db.models.user_model import add_user, user_exists
               help='Reset the database to a clean state before initialization')
 def init_db_command(reset):
     """Command-line command to initialize the database."""
-    if reset:
-        _destroy_database()
-        click.echo('Database deleted.')
+    try:
+        if reset:
+            _destroy_database()
+            click.echo('Database deleted.')
 
-    _create_database()
+        _create_database()
+        click.echo('Database created.')
+    except OperationalError as e:
+        click.echo(f'Could not connect to database: {e}', err=True)
+        sys.exit(1)
 
     try:
         _apply_db_schema()
     except OperationalError:
+        click.echo(f'Error applying schema: {e}', err=True)
         click.echo('Pass -r or --reset flag to reset database.')
     else:
         click.echo('Initialized the database.')

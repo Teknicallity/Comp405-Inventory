@@ -26,6 +26,8 @@ def _connect_to_db(with_db_name=True):
             )
         except OperationalError as e:
             retries += 1
+            if not with_db_name:
+                raise e
             if retries >= MAX_RETRIES:
                 click.echo("Failed to connect to the database after multiple attempts.")
                 raise e
@@ -58,10 +60,7 @@ def _apply_db_schema():
     try:
         _execute_sql_file(db, schema_path)
     except FileNotFoundError:
-        click.echo(f"Schema file {schema_path} not found.")
-    except OperationalError as e:
-        click.echo(f"Error applying schema: {e}")
-        raise e
+        click.echo(f"Schema file {schema_path} not found.", err=True)
     else:
         db.commit()
 
