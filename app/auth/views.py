@@ -2,9 +2,9 @@ import flask
 import flask_login
 
 from app.auth import auth
-from app import login_manager, bcrypt
+from app import login_manager, bcrypt, debug_only
 from app.auth.forms import LoginForm
-from db.models.user_model import get_user_by_username
+from db.models.user_model import get_user_by_username, User
 
 
 @login_manager.user_loader
@@ -36,3 +36,32 @@ def logout():
     next = flask.request.args.get("next")
     flask.flash('Logged out successfully.')
     return flask.redirect(next or flask.url_for('main.index'))
+
+
+@auth.route('/current_user', methods=['GET'])
+@debug_only
+def current_user_info():
+    user: User = flask_login.current_user
+    return f'''
+    <table style="border: 1px solid black; ">
+        <thead>
+            <tr>
+                <th>Current User</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Username</td>
+                <td>{user.username}</td>
+            </tr>
+            <tr>
+                <td>Is Admin</td>
+                <td>{user.is_admin}</td>
+            </tr>
+            <tr>
+                <td>Employee Id</td>
+                <td>{user.employee_id}</td>
+            </tr>
+        </tbody>
+    </table>
+    '''

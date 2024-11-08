@@ -19,7 +19,7 @@ class User(UserMixin):
         return cls(
             username=row[1],
             password_hash=row[2],
-            is_admin=row[3],
+            is_admin=row[3] == 1,
             employee_id=row[4]
         )
 
