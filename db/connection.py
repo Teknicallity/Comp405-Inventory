@@ -1,32 +1,44 @@
 import os.path
+import time
+
 import click
 import pymysql
 from flask import current_app, g
 from pymysql import OperationalError
 
+MAX_RETRIES = 5
+RETRY_DELAY = 2
+
+
+def _connect_to_db(with_db_name=True):
+    """
+    Helper function to create a database connection with or without the config database name.
+    """
+    retries = 0
+    while retries < MAX_RETRIES:
+        try:
+            return pymysql.connect(
+                host=current_app.config['MYSQL_HOST'],
+                port=current_app.config['MYSQL_PORT'],
+                user=current_app.config['MYSQL_USER'],
+                password=current_app.config['MYSQL_PASSWORD'],
+                database=current_app.config['MYSQL_DATABASE'] if with_db_name else None,
+            )
+        except OperationalError as e:
+            retries += 1
+            if retries >= MAX_RETRIES:
+                click.echo("Failed to connect to the database after multiple attempts.")
+                raise e
+            else:
+                click.echo(f"Connection failed ({retries}/{MAX_RETRIES}), retrying in {RETRY_DELAY} seconds...")
+                time.sleep(RETRY_DELAY)
+
 
 def get_db():
     """Establish and return a database connection, caching it in the global object."""
     if 'db' not in g:
-        g.db = pymysql.connect(
-            host=current_app.config['MYSQL_HOST'],
-            port=current_app.config['MYSQL_PORT'],
-            user=current_app.config['MYSQL_USER'],
-            password=current_app.config['MYSQL_PASSWORD'],
-            database=current_app.config['MYSQL_DATABASE'],
-            # ssl_verify_identity=True,
-            # ssl_ca='SSL/certs/ca-cert.pem'
-        )
+        g.db = _connect_to_db(with_db_name=True)
     return g.db
-
-
-def _get_db_server():
-    return pymysql.connect(
-        host=current_app.config['MYSQL_HOST'],
-        port=current_app.config['MYSQL_PORT'],
-        user=current_app.config['MYSQL_USER'],
-        password=current_app.config['MYSQL_PASSWORD'],
-    )
 
 
 def close_db(e=None):
@@ -65,7 +77,7 @@ def _execute_sql_file(db, filepath):
 
 def _execute_db_command(command):
     """Execute a SQL command on the server connection without a specific database."""
-    with _get_db_server() as connection:
+    with _connect_to_db(with_db_name=False) as connection:
         with connection.cursor() as cursor:
             cursor.execute(command)
             connection.commit()
