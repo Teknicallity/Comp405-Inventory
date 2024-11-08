@@ -13,6 +13,8 @@ class DevConfig(BaseConfig):
     ADMIN_USER = 'root'
     ADMIN_PASSWORD = 'password'
 
+    RETRY_DB_CONNECTION = False
+
     @classmethod
     def init_app(cls, app):
         BaseConfig.init_app(app)

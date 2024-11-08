@@ -26,7 +26,7 @@ def _connect_to_db(with_db_name=True):
             )
         except OperationalError as e:
             retries += 1
-            if not with_db_name:
+            if not current_app.config['RETRY_DB_CONNECTION']:
                 raise e
             if retries >= MAX_RETRIES:
                 click.echo("Failed to connect to the database after multiple attempts.")

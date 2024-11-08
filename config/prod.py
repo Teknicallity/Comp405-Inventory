@@ -21,6 +21,7 @@ class ProdConfig(BaseConfig):
 
     ADMIN_USER = os.environ.get('ADMIN_USER', None)
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', None)
+    RETRY_DB_CONNECTION = os.getenv("RETRY_DB_CONNECTION", True)
 
     @classmethod
     def init_app(cls, app):
