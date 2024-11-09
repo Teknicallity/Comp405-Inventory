@@ -54,14 +54,17 @@ def get_item_by_id(item_id: int):
         return ItemModel.from_row(row) if row else None
 
 
-def add_item(item: ItemModel):
+def add_item(item: ItemModel) -> ItemModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO items (name, brand, model_number, serial_number) VALUES (?, ?, ?, ?)',
+            'INSERT INTO items (name, brand, model_number, serial_number) VALUES (%s, %s, %s, %s)',
             (item.name, item.brand, item.model_number, item.serial_number)
         )
+        item_id = cursor.lastrowid
     db.commit()
+    return ItemModel(item_id=item_id, name=item.name, brand=item.brand, model_number=item.model_number,
+                     serial_number=item.serial_number)
 
 
 def update_item(item: ItemModel):
@@ -72,6 +75,7 @@ def update_item(item: ItemModel):
             SET name = %s, brand = %s, model_number = %s, serial_number = %s
             WHERE item_id = %s
         ''', (item.name, item.brand, item.model_number, item.serial_number, item.item_id))
+    db.commit()
 
 
 def get_items_by_filters(brand=None, model_number=None, serial_number=None):
