@@ -78,6 +78,14 @@ def update_item(item: ItemModel):
     db.commit()
 
 
+def delete_item(item_id: int):
+    db = get_db()
+
+    with db.cursor() as cursor:
+        cursor.execute(f'DELETE FROM items WHERE item_id = {item_id}')
+    db.commit()
+
+
 def get_items_by_filters(brand=None, model_number=None, serial_number=None):
     db = get_db()
     query = "SELECT * FROM items WHERE 1=1"
