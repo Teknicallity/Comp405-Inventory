@@ -1,4 +1,5 @@
 from flask import jsonify, request, render_template
+from flask_login import login_required
 
 from db.models.item_model import ItemModel, add_item
 from . import api
@@ -23,6 +24,7 @@ def get_single_item(item_id):
 
 
 @api.route('/items/', methods=['POST'])
+@login_required
 def create_item():
     data = request.get_json()
 
@@ -41,6 +43,7 @@ def create_item():
 
 
 @api.route('/items/<int:item_id>', methods=['PUT'])
+@login_required
 def update_item(item_id):
     item = item_model.get_item_by_id(item_id)
     if not item:
@@ -64,6 +67,7 @@ def update_item(item_id):
 
 
 @api.route('/items/<int:item_id>', methods=['DELETE'])
+@login_required
 def delete_item(item_id):
     item = item_model.get_item_by_id(item_id)
     if not item:
