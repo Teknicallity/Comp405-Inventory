@@ -8,8 +8,8 @@
 
 {% block main %}
     <div class="item-card" style="margin: auto">
-        <h1 id="itemName">{{ item.name }}</h1>
-        <form id="itemForm">
+        <h1 id="objectName">{{ item.name }}</h1>
+        <form id="objectForm">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
             <div class="item-details">
                 <div class="detail">
@@ -31,14 +31,14 @@
                            disabled>
                 </div>
             </div>
-            <input type="hidden" id="item_id" name="item_id" value="{{ item.item_id or '' }}" disabled readonly>
+            <input type="hidden" id="objectId" name="item_id" value="{{ item.item_id }}" disabled readonly>
             <p id="responseText"></p>
             {% if current_user.is_authenticated %}
-            <button type="button" id="editButton" onclick="toggleEdit()">Edit</button>
+            <button type="button" id="editButton" onclick="toggleEdit('{{ url_for("api.update_item", item_id=item.item_id) }}')">Edit</button>
             {% endif %}
         </form>
     </div>
     {% if current_user.is_authenticated %}
-    <script src="{{ url_for('static', filename='javascript/item.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
     {% endif %}
 {% endblock %}

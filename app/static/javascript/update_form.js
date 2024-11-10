@@ -1,46 +1,48 @@
-function toggleEdit() {
-    const form = document.getElementById('itemForm');
+function toggleEdit(url) {
+    const form = document.getElementById('objectForm');
     const inputs = form.querySelectorAll('input');
     const editButton = document.getElementById('editButton');
     const csrfToken = document.getElementById('csrf_token').value;
-    const itemNameHeader = document.getElementById('itemName');
-    const itemNameInput = document.getElementById('name');
-
+    const objectNameHeader = document.getElementById('objectName');
+    const objectNameInput = document.getElementById('name');
+    console.log('toggle')
     if (editButton.textContent === 'Edit') {
         // Enable inputs for editing
         inputs.forEach(input => {
-            if (input.id !== 'item_id') input.disabled = false;
+            if (input.id !== 'objectId') input.disabled = false;
         });
         editButton.textContent = 'Save';
+        console.log('editButton');
     } else {
+        console.log('saving')
         // Gather form data and send a PUT request
-        const itemData = {};
-        inputs.forEach(input => itemData[input.name] = input.value);
-        const itemId = document.getElementById('item_id').value;
-        console.log(itemData)
-        fetch(`/api/items/${itemId}`, {
+        const formData = {};
+        inputs.forEach(input => formData[input.name] = input.value);
+
+        console.log(formData)
+        fetch(`${url}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
-            body: JSON.stringify(itemData)
+            body: JSON.stringify(formData)
         })
             .then(response => {
                 if (response.ok) {
                     // Disable inputs after saving
                     inputs.forEach(input => input.disabled = true);
                     editButton.textContent = 'Edit';
-                    itemNameHeader.innerHTML = itemNameInput.value
-                    flashResponseText('Item updated successfully.', 'darkgreen').then();
+                    objectNameHeader.innerHTML = objectNameInput.value
+                    flashResponseText('Updated successfully.', 'darkgreen').then();
                 } else if (response.status === 401) {
                     flashResponseText('Unauthorized', 'red').then();
                 } else {
-                    flashResponseText('Failed to update item.', 'red').then();
+                    flashResponseText('Failed to update.', 'red').then();
                 }
             })
             .catch(error => {
-                console.error('Error updating item:', error);
+                console.error('Error updating:', error);
                 flashResponseText('An error occurred.', 'red').then();
             });
     }
