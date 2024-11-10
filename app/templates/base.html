@@ -10,6 +10,15 @@
 <body>
 <header class="header">
     <a class="header-link" href="/"><h2>Home</h2></a>
+    {% if current_user.is_authenticated %}
+        <form action="{{ url_for('auth.logout') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{{ url_for('auth.login') }}">Login</a>
+        {#register#}
+    {% endif %}
 </header>
 
 <div class="main-content">
