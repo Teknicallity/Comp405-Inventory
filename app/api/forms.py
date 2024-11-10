@@ -8,7 +8,7 @@ class CreateItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired()])
     brand = StringField('Item Brand', validators=[])
     model = StringField('Item Model', validators=[])
-    serial_number = StringField('Item Serial Number', validators=[])
+    serial = StringField('Item Serial Number', validators=[])
     submit = SubmitField('Submit')
 
 
@@ -17,7 +17,7 @@ class UpdateItemForm(FlaskForm):
     name = StringField('Item Name', validators=[])
     brand = StringField('Item Brand', validators=[])
     model = StringField('Item Model', validators=[])
-    serial_number = StringField('Item Serial Number', validators=[])
+    serial = StringField('Item Serial Number', validators=[])
     submit = SubmitField('Submit')
 
 

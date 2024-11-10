@@ -32,9 +32,9 @@ def create_item():
 
     brand = data.get('brand') or None
     model = data.get('model') or None
-    serial_number = data.get('serial_number') or None
+    serial = data.get('serial') or None
 
-    item = ItemModel(name, brand, model, serial_number)
+    item = ItemModel(name, brand, model, serial)
     new_item = add_item(item)
 
     return jsonify(new_item.to_dict()), 201
@@ -50,8 +50,8 @@ def update_item(item_id):
     fields_to_update = {
         "name": data.get("name"),
         "brand": data.get("brand"),
-        "model_number": data.get("model"),
-        "serial_number": data.get("serial_number"),
+        "model": data.get("model"),
+        "serial": data.get("serial"),
     }
 
     for field, value in fields_to_update.items():

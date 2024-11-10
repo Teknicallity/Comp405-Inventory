@@ -33,8 +33,8 @@ CREATE TABLE items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     brand VARCHAR(50),
-    model_number VARCHAR(50),
-    serial_number VARCHAR(50),
+    model VARCHAR(50),
+    serial VARCHAR(50),
     location_id INT,
     FOREIGN KEY (location_id) REFERENCES locations (location_id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;

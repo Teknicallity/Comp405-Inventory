@@ -4,11 +4,11 @@ from db.connection import get_db
 
 
 class ItemModel:
-    def __init__(self, name, brand=None, model_number=None, serial_number=None, item_id=None):
+    def __init__(self, name, brand=None, model=None, serial=None, item_id=None):
         self.name = name
         self.brand = brand
-        self.model_number = model_number
-        self.serial_number = serial_number
+        self.model = model
+        self.serial = serial
         self.item_id = item_id
 
     @classmethod
@@ -16,8 +16,8 @@ class ItemModel:
         return cls(
             name=row[1],
             brand=row[2],
-            model_number=row[3],
-            serial_number=row[4],
+            model=row[3],
+            serial=row[4],
             item_id=row[0]
         )
 
@@ -34,8 +34,8 @@ class ItemModel:
             "item_id": self.item_id,
             "name": self.name,
             "brand": self.brand,
-            "model_number": self.model_number,
-            "serial_number": self.serial_number
+            "model": self.model,
+            "serial": self.serial
         }
 
 
@@ -58,13 +58,13 @@ def add_item(item: ItemModel) -> ItemModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO items (name, brand, model_number, serial_number) VALUES (%s, %s, %s, %s)',
-            (item.name, item.brand, item.model_number, item.serial_number)
+            'INSERT INTO items (name, brand, model, serial) VALUES (%s, %s, %s, %s)',
+            (item.name, item.brand, item.model, item.serial)
         )
         item_id = cursor.lastrowid
     db.commit()
-    return ItemModel(item_id=item_id, name=item.name, brand=item.brand, model_number=item.model_number,
-                     serial_number=item.serial_number)
+    return ItemModel(item_id=item_id, name=item.name, brand=item.brand, model=item.model,
+                     serial=item.serial)
 
 
 def update_item(item: ItemModel):
@@ -72,9 +72,9 @@ def update_item(item: ItemModel):
     with db.cursor() as cursor:
         cursor.execute(f'''
             UPDATE items
-            SET name = %s, brand = %s, model_number = %s, serial_number = %s
+            SET name = %s, brand = %s, model = %s, serial = %s
             WHERE item_id = %s
-        ''', (item.name, item.brand, item.model_number, item.serial_number, item.item_id))
+        ''', (item.name, item.brand, item.model, item.serial, item.item_id))
     db.commit()
 
 
@@ -86,7 +86,7 @@ def delete_item(item_id: int):
     db.commit()
 
 
-def get_items_by_filters(brand=None, model_number=None, serial_number=None):
+def get_items_by_filters(brand=None, model=None, serial=None):
     db = get_db()
     query = "SELECT * FROM items WHERE 1=1"
     values = []
@@ -94,12 +94,12 @@ def get_items_by_filters(brand=None, model_number=None, serial_number=None):
     if brand:
         query += " AND brand LIKE ?"
         values.append(f"%{brand}%")
-    if model_number:
-        query += " AND model_number = ?"
-        values.append(model_number)
-    if serial_number:
-        query += " AND serial_number = ?"
-        values.append(serial_number)
+    if model:
+        query += " AND model = ?"
+        values.append(model)
+    if serial:
+        query += " AND serial = ?"
+        values.append(serial)
 
     with db.cursor() as cursor:
         cursor.execute(query, tuple(values))
