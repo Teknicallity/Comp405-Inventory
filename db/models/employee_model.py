@@ -20,7 +20,7 @@ class EmployeeModel:
         )
 
     @classmethod
-    def list_from_row(cls, rows):
+    def list_from_row(cls, rows) -> list:
         return [cls.from_row(row) for row in rows]
 
     def to_dict(self):
@@ -33,18 +33,19 @@ class EmployeeModel:
         }
 
 
-def get_all_employees():
+def get_all_employees() -> list:
     db = get_db()
     with db.cursor() as cursor:
-        cursor.execute('SELECT * FROM items')
-        return cursor.fetchall()
+        cursor.execute('SELECT * FROM employees')
+        return EmployeeModel.list_from_row(cursor.fetchall())
 
 
-def get_employee_by_id(employee_id):
+def get_employee_by_id(employee_id: int) -> EmployeeModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute(f'SELECT * FROM employees WHERE employee_id={employee_id}')
-        return cursor.fetchone()
+        row = cursor.fetchone()
+        return EmployeeModel.from_row(row) if row else None
 
 
 def add_employee(employee: EmployeeModel) -> EmployeeModel:
