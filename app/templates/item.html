@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/item.css') }}">
+{% endblock %}
+
+
+{% block main %}
+    <div class="item-card" style="margin: auto">
+        <h1 id="itemName">{{ item.name }}</h1>
+        <form id="itemForm">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+            <div class="item-details">
+                <div class="detail">
+                    <label for="name" class="label">Name:</label>
+                    <input type="text" id="name" name="name" value="{{ item.name or '' }}" disabled>
+                </div>
+                <div class="detail">
+                    <label for="brand" class="label">Brand:</label>
+                    <input type="text" id="brand" name="brand" value="{{ item.brand or '' }}" disabled>
+                </div>
+                <div class="detail">
+                    <label for="model" class="label">Model:</label>
+                    <input type="text" id="model" name="model" value="{{ item.model or '' }}"
+                           disabled>
+                </div>
+                <div class="detail">
+                    <label for="serial" class="label">Serial:</label>
+                    <input type="text" id="serial" name="serial" value="{{ item.serial or '' }}"
+                           disabled>
+                </div>
+            </div>
+            <input type="hidden" id="item_id" name="item_id" value="{{ item.item_id or '' }}" disabled readonly>
+            <p id="responseText"></p>
+            <button type="button" id="editButton" onclick="toggleEdit()">Edit</button>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='javascript/item.js') }}"></script>
+{% endblock %}

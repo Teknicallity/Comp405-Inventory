@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/large_table.css') }}">
+{% endblock %}
+
+
+{% block main %}
+    <div class="table-container" style="max-width: 1500px; margin: auto">
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Model Number</th>
+                <th>Serial Number</th>
+                {#            <th>item.location</th>#}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr onclick="window.location.href='{{ url_for('main.inventory_item', item_id=item.item_id) }}';" style="cursor: pointer;">>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.brand }}</td>
+                    <td>{{ item.model }}</td>
+                    <td>{{ item.serial }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
