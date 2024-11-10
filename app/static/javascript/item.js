@@ -33,6 +33,8 @@ function toggleEdit() {
                     editButton.textContent = 'Edit';
                     itemNameHeader.innerHTML = itemNameInput.value
                     flashResponseText('Item updated successfully.', 'darkgreen').then();
+                } else if (response.status === 401) {
+                    flashResponseText('Unauthorized', 'red').then();
                 } else {
                     flashResponseText('Failed to update item.', 'red').then();
                 }

@@ -33,8 +33,12 @@
             </div>
             <input type="hidden" id="item_id" name="item_id" value="{{ item.item_id or '' }}" disabled readonly>
             <p id="responseText"></p>
+            {% if current_user.is_authenticated %}
             <button type="button" id="editButton" onclick="toggleEdit()">Edit</button>
+            {% endif %}
         </form>
     </div>
+    {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='javascript/item.js') }}"></script>
+    {% endif %}
 {% endblock %}
