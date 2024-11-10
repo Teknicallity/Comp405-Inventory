@@ -7,10 +7,17 @@
 
 
 {% block main %}
-    <form method=post>
+    <form method="post">
         {{ form.csrf_token }}
-        Username: <input name="username"><br>
-        Password: <input name="password" type=password><br>
-        <button>Log In</button>
+        Username: {{ form.username(size=20) }}<br>
+        Password: {{ form.password(size=20) }}<br>
+        <button type="submit">Log In</button>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p style="display: inline-block">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </form>
 {% endblock %}
