@@ -41,8 +41,8 @@ CREATE TABLE items (
 
 CREATE TABLE checkouts (
     checkout_id INT AUTO_INCREMENT PRIMARY KEY,
-    item_id INT,
-    status_id INT,
+    item_id INT NOT NULL,
+    status_id INT DEFAULT 1,
     employee_id INT,
     checkout_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     returned_date TIMESTAMP NULL,
@@ -69,4 +69,6 @@ CREATE TABLE qrcodes (
     FOREIGN KEY (created_by) REFERENCES employees (employee_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
-INSERT INTO items (name) VALUES ('test tool')
+INSERT INTO items (name, serial) VALUES ('test tool', 'serial5612');
+
+INSERT INTO statuses (name) VALUES ('Available'), ('Checked Out'), ('Missing'), ('Damaged');
