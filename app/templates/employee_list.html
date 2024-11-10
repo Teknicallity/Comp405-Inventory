@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/large_table.css') }}">
+{% endblock %}
+
+
+{% block main %}
+    <div class="table-container" style="max-width: 1500px; margin: auto">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Title</th>
+                <th>Reports To</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for employee in employees %}
+                <tr onclick="window.location.href='{{ url_for('main.employee_detail', employee_id=employee.employee_id) }}';" style="cursor: pointer;">>
+                    <td>{{ employee.employee_id }}</td>
+                    <td>{{ employee.first_name }}</td>
+                    <td>{{ employee.last_name }}</td>
+                    <td>{{ employee.title }}</td>
+                    <td>{{ employee.reports_to_name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

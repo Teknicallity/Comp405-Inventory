@@ -2,12 +2,13 @@ from db.connection import get_db
 
 
 class EmployeeModel:
-    def __init__(self, first_name, last_name, title, reports_to=None, employee_id=None):
+    def __init__(self, first_name, last_name, title, reports_to=None, employee_id=None, reports_to_name=None):
         self.employee_id = employee_id
         self.first_name = first_name
         self.last_name = last_name
         self.title = title
         self.reports_to = reports_to
+        self.reports_to_name = reports_to_name
 
     @classmethod
     def from_row(cls, row):
@@ -17,6 +18,7 @@ class EmployeeModel:
             last_name=row[2],
             title=row[3],
             reports_to=row[4],
+            reports_to_name=row[5] or None
         )
 
     @classmethod
@@ -30,20 +32,31 @@ class EmployeeModel:
             'last_name': self.last_name,
             'title': self.title,
             'reports_to': self.reports_to,
+            'reports_to_name': self.reports_to_name
         }
 
 
 def get_all_employees() -> list:
     db = get_db()
     with db.cursor() as cursor:
-        cursor.execute('SELECT * FROM employees')
+        cursor.execute('''
+            SELECT e.employee_id, e.first_name, e.last_name, e.title, e.reports_to,
+                   CONCAT(r.first_name, ' ', r.last_name) AS manager_name
+            FROM employees e
+            LEFT JOIN employees r ON e.reports_to = r.employee_id
+        ''')
         return EmployeeModel.list_from_row(cursor.fetchall())
 
 
 def get_employee_by_id(employee_id: int) -> EmployeeModel:
     db = get_db()
     with db.cursor() as cursor:
-        cursor.execute(f'SELECT * FROM employees WHERE employee_id={employee_id}')
+        cursor.execute(f'''
+            SELECT e.employee_id, e.first_name, e.last_name, e.title, e.reports_to, CONCAT(r.first_name, r.last_name)
+            FROM employees e
+            LEFT JOIN employees r ON e.reports_to = r.employee_id
+            WHERE e.employee_id={employee_id}
+        ''')
         row = cursor.fetchone()
         return EmployeeModel.from_row(row) if row else None
 
