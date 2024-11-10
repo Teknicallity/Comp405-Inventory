@@ -15,7 +15,8 @@
                 <th>Brand</th>
                 <th>Model Number</th>
                 <th>Serial Number</th>
-                {#            <th>item.location</th>#}
+                <th>Location</th>
+                <th>Status</th>
             </tr>
             </thead>
             <tbody>
@@ -25,6 +26,8 @@
                     <td>{{ item.brand }}</td>
                     <td>{{ item.model }}</td>
                     <td>{{ item.serial }}</td>
+                    <td>{{ item.location_id }}</td>
+                    <td>{{ item.status_id }}</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -4,21 +4,26 @@ from db.connection import get_db
 
 
 class ItemModel:
-    def __init__(self, name, brand=None, model=None, serial=None, item_id=None):
+    def __init__(self, name, brand=None, model=None, serial=None, item_id=None, location_id=None, status_id=None):
+        self.item_id = item_id
         self.name = name
         self.brand = brand
         self.model = model
         self.serial = serial
-        self.item_id = item_id
+        self.location_id = location_id
+        self.status_id = status_id
+
 
     @classmethod
     def from_row(cls, row):
         return cls(
+            item_id=row[0],
             name=row[1],
             brand=row[2],
             model=row[3],
             serial=row[4],
-            item_id=row[0]
+            location_id=row[5],
+            status_id=row[6]
         )
 
     @classmethod
@@ -35,21 +40,30 @@ class ItemModel:
             "name": self.name,
             "brand": self.brand,
             "model": self.model,
-            "serial": self.serial
+            "serial": self.serial,
+            "location_id": self.location_id,
+            "status_id": self.status_id
         }
 
 
 def get_all_items():
     db = get_db()
     with db.cursor() as cursor:
-        cursor.execute('SELECT * FROM items')
+        cursor.execute('''
+            SELECT i.item_id, i.name, i.brand, i.model, i.serial, i.location_id, i.status_id
+            FROM items i
+        ''')
         return ItemModel.list_from_rows(cursor.fetchall())
 
 
 def get_item_by_id(item_id: int):
     db = get_db()
     with db.cursor() as cursor:
-        cursor.execute(f'SELECT * FROM items WHERE item_id = {item_id}')
+        cursor.execute(f'''
+            SELECT i.item_id, i.name, i.brand, i.model, i.serial, i.location_id, i.status_id
+            FROM items i
+            WHERE item_id = {item_id}
+        ''')
         row = cursor.fetchone()
         return ItemModel.from_row(row) if row else None
 
@@ -70,12 +84,39 @@ def add_item(item: ItemModel) -> ItemModel:
 def update_item(item: ItemModel):
     db = get_db()
     with db.cursor() as cursor:
-        cursor.execute(f'''
-            UPDATE items
-            SET name = %s, brand = %s, model = %s, serial = %s
-            WHERE item_id = %s
-        ''', (item.name, item.brand, item.model, item.serial, item.item_id))
-    db.commit()
+        query = 'UPDATE items SET'
+        updates = []
+        params = []
+
+        if item.name is not None:
+            updates.append(' name = %s')
+            params.append(item.name)
+
+        if item.brand is not None:
+            updates.append(' brand = %s')
+            params.append(item.brand)
+
+        if item.model is not None:
+            updates.append(' model = %s')
+            params.append(item.model)
+
+        if item.serial is not None:
+            updates.append(' serial = %s')
+            params.append(item.serial)
+
+        if item.location_id is not None:
+            updates.append(' location_id = %s')
+            params.append(item.location_id)
+
+        if item.status_id is not None:
+            updates.append(' status_id = %s')
+            params.append(item.status_id)
+
+        if updates:
+            query += ','.join(updates) + ' WHERE item_id = %s'
+            params.append(item.item_id)
+            cursor.execute(query, tuple(params))
+            db.commit()
 
 
 def delete_item(item_id: int):
@@ -88,7 +129,10 @@ def delete_item(item_id: int):
 
 def get_items_by_filters(brand=None, model=None, serial=None):
     db = get_db()
-    query = "SELECT * FROM items WHERE 1=1"
+    query = '''
+        SELECT i.item_id, i.name, i.brand, i.model, i.serial, i.location_id, i.status_id 
+        FROM items i 
+        WHERE 1=1'''
     values = []
 
     if brand:

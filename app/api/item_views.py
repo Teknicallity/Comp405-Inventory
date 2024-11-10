@@ -55,6 +55,8 @@ def update_item(item_id):
         "brand": data.get("brand"),
         "model": data.get("model"),
         "serial": data.get("serial"),
+        "location_id": data.get("location_id"),
+        "status_id": data.get("status_id"),
     }
 
     for field, value in fields_to_update.items():

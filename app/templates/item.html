@@ -30,6 +30,16 @@
                     <input type="text" id="serial" name="serial" value="{{ item.serial or '' }}"
                            disabled>
                 </div>
+                <div class="detail">
+                    <label for="location_id" class="label">Location:</label>
+                    <input type="text" id="location_id" name="location_id" value="{{ item.location_id or '' }}"
+                           disabled>
+                </div>
+                <div class="detail">
+                    <label for="status_id" class="label">Status:</label>
+                    <input type="text" id="status_id" name="status_id" value="{{ item.status_id or '' }}"
+                           disabled>
+                </div>
             </div>
             <input type="hidden" id="objectId" name="item_id" value="{{ item.item_id }}" disabled readonly>
             <p id="responseText"></p>
