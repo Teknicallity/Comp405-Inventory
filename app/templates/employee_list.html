@@ -20,7 +20,7 @@
             </thead>
             <tbody>
             {% for employee in employees %}
-                <tr onclick="window.location.href='{{ url_for('main.employee_detail', employee_id=employee.employee_id) }}';" style="cursor: pointer;">>
+                <tr onclick="window.location.href='{{ url_for('main.employee_details', employee_id=employee.employee_id) }}';">
                     <td>{{ employee.employee_id }}</td>
                     <td>{{ employee.first_name }}</td>
                     <td>{{ employee.last_name }}</td>

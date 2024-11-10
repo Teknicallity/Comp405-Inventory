@@ -21,7 +21,7 @@
             </thead>
             <tbody>
             {% for item in items %}
-                <tr onclick="window.location.href='{{ url_for('main.inventory_item', item_id=item.item_id) }}';" style="cursor: pointer;">>
+                <tr onclick="window.location.href='{{ url_for('main.item_details', item_id=item.item_id) }}';">
                     <td>{{ item.name }}</td>
                     <td>{{ item.brand }}</td>
                     <td>{{ item.model }}</td>
