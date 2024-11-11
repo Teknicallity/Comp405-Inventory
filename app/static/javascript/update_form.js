@@ -19,7 +19,13 @@ function toggleEdit(url) {
         console.log('saving')
         // Gather form data and send a PUT request
         const formData = {};
-        inputs.forEach(input => formData[input.name] = input.value);
+        inputs.forEach(input => {
+            if (input.type === 'checkbox') {
+                formData[input.name] = input.checked;
+            } else { // currently text and hidden
+                formData[input.name] = input.value
+            }
+        });
 
         const method = (editButton.textContent === 'Save') ? 'PUT' : 'POST';
         console.log(formData)

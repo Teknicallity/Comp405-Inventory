@@ -19,6 +19,7 @@
                 <th>Last Name</th>
                 <th>Title</th>
                 <th>Reports To</th>
+                <th>Username</th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +30,7 @@
                     <td>{{ employee.last_name }}</td>
                     <td>{{ employee.title }}</td>
                     <td>{{ employee.reports_to_name }}</td>
+                    <td>{{ employee.username }}</td>
                 </tr>
             {% endfor %}
             </tbody>

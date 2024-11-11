@@ -52,6 +52,20 @@ def add_user(username, password, is_admin, employee_id=None):
     db.commit()
 
 
+def update_user(employee_id, username=None, password=None, is_admin=None):
+    db = get_db()
+    with db.cursor() as cursor:
+        if password is not None:
+            password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+            cursor.execute('UPDATE users SET password_hash=%s WHERE employee_id=%s', (password_hash, employee_id))
+        if username is not None:
+            cursor.execute('UPDATE users SET username=%s WHERE employee_id=%s', (username, employee_id))
+        if is_admin is not None:
+            cursor.execute('UPDATE users SET is_admin=%s WHERE employee_id=%s', (is_admin, employee_id))
+
+        db.commit()
+
+
 def user_exists(username):
     db = get_db()
     with db.cursor() as cursor:
@@ -63,6 +77,22 @@ def get_user_by_username(username) -> User:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+        row = cursor.fetchone()
+        return User.from_db_row(row) if row else None
+
+
+def get_user_by_id(user_id) -> User:
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute('SELECT * FROM users WHERE user_id = %s', (user_id,))
+        row = cursor.fetchone()
+        return User.from_db_row(row) if row else None
+
+
+def get_user_by_employee_id(employee_id) -> User:
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute('SELECT * FROM users WHERE employee_id = %s', (employee_id,))
         row = cursor.fetchone()
         return User.from_db_row(row) if row else None
 

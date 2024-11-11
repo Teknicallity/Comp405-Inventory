@@ -20,19 +20,28 @@ def create_employee():
     if not user.is_admin:
         return abort(401)
 
-    data = request.get_json()
+    data: dict = request.get_json()
+    first_name = data.get('first_name') or None
+    last_name = data.get('last_name') or None
+    title = data.get('title') or None
+    reports_to_id = data.get('reports_to') or None
+    username = data.get('username') or None
+    password = data.get('password') or None
+    is_admin = True if data.get('is_admin') is True else False
 
-    first_name = data['first_name'] or None
-    last_name = data['last_name'] or None
-    title = data['title'] or None
-    reports_to_id = data['reports_to'] or None
-
-    if not (first_name and last_name and title and reports_to_id):
+    if not (first_name and last_name and title):
         return abort(400)
 
-    employee = EmployeeModel(first_name=first_name, last_name=last_name, title=title, reports_to=reports_to_id)
+    employee = EmployeeModel(
+        first_name=first_name,
+        last_name=last_name,
+        title=title,
+        reports_to=reports_to_id,
+        username=username,
+        password=password,
+        is_admin=is_admin
+    )
     new_employee = employee_model.add_employee(employee)
-
     return jsonify(new_employee.to_dict()), 201
 
 
@@ -61,7 +70,10 @@ def update_employee(employee_id):
         'first_name': data.get('first_name'),
         'last_name': data.get('last_name'),
         'title': data.get('title'),
-        'reports_to': data.get('reports_to')
+        'reports_to': data.get('reports_to'),
+        'username': data.get('username'),
+        'password': data.get('password'),
+        'is_admin': True if data.get('is_admin') is True else False
     }
 
     for field, value in fields_to_update.items():
