@@ -21,13 +21,13 @@ def create_employee():
         return abort(401)
 
     data: dict = request.get_json()
-    first_name = data['first_name'] or None
-    last_name = data['last_name'] or None
-    title = data['title'] or None
-    reports_to_id = data['reports_to'] or None
-    username = data['username'] or None
-    password = data['password'] or None
-    is_admin = data.get('is_admin')
+    first_name = data.get('first_name') or None
+    last_name = data.get('last_name') or None
+    title = data.get('title') or None
+    reports_to_id = data.get('reports_to') or None
+    username = data.get('username') or None
+    password = data.get('password') or None
+    is_admin = True if data.get('is_admin') is True else False
 
     if not (first_name and last_name and title):
         return abort(400)
@@ -73,7 +73,7 @@ def update_employee(employee_id):
         'reports_to': data.get('reports_to'),
         'username': data.get('username'),
         'password': data.get('password'),
-        'is_admin': data.get('is_admin')
+        'is_admin': True if data.get('is_admin') is True else False
     }
 
     for field, value in fields_to_update.items():
