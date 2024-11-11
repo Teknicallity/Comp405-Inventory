@@ -1,4 +1,4 @@
-from flask import jsonify, request, render_template
+from flask import jsonify, request, render_template, url_for, redirect
 from flask_login import login_required
 
 from db.models.item_model import ItemModel, add_item
@@ -72,11 +72,12 @@ def update_item(item_id):
 @login_required
 def delete_item(item_id):
     item = item_model.get_item_by_id(item_id)
+    next = request.args.get('next')
     if not item:
         return jsonify({"error": "Item not found"}), 404
 
     item_model.delete_item(item.item_id)
-    return jsonify(item.to_dict()), 200
+    return redirect(next or url_for('main.all_items'))
 
 
 @api.route('/itemtest/', methods=['GET'])

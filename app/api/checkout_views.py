@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, redirect, url_for
 from flask_login import login_required, current_user
 
 from . import api
@@ -83,8 +83,8 @@ def delete_checkout(checkout_id):
     user: User = current_user
     if not user.is_admin:
         return jsonify({'error': 'Only an admin can delete checkout'}), 403
-
+    next = request.args.get('next')
     checkout = checkout_model.get_checkout_by_id(checkout_id)
 
     checkout_model.delete_checkout(checkout_id)
-    return jsonify(checkout.to_dict()), 200
+    return redirect(next or url_for('main.all_checkouts'))
