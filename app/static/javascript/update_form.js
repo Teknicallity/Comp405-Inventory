@@ -118,3 +118,66 @@ function cancelEdit(getObjectFromIdUrl) {
             flashResponseText('Failed to reset changes.', 'red').then();
         });
 }
+
+function deleteObject(deleteUrl) {
+    const csrfToken = document.getElementById('csrf_token').value
+    const deleteButton = document.getElementById('deleteButton');
+    const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+
+    if (deleteButton.textContent.trim() !== 'Confirm') {
+        deleteButton.textContent = 'Confirm'
+        cancelDeleteButton.style.display = 'inline';
+    } else {
+        fetch(`${deleteUrl}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            }
+        }).then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else if (response.status === 404) {
+                flashResponseText('Item not found.', 'red').then();
+            } else if (response.status === 403 || response.status === 401) {
+                flashResponseText('You are not authorized to delete this item.', 'red').then();
+            } else {
+                flashResponseText('Failed to delete the item.', 'red').then();
+            }
+        }).catch(error => {
+            console.error('Error during deletion:', error);
+            flashResponseText('An error occurred while deleting.', 'red').then();
+        });
+    }
+}
+
+function cancelDelete() {
+    const deleteButton = document.getElementById('deleteButton');
+    const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+
+    deleteButton.textContent = 'Delete'
+    cancelDeleteButton.style.display = 'none';
+}
+
+function returnCheckout(returnUrl) {
+    const csrfToken = document.getElementById('csrf_token').value
+    const returnButton = document.getElementById('returnButton')
+
+    fetch(returnUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        }
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.status === 404) {
+            flashResponseText('Item not found.', 'red').then();
+        } else if (response.status === 403 || response.status === 401) {
+            flashResponseText('You are not authorized to return this item.', 'red').then();
+        } else {
+            flashResponseText('Failed to return the item.', 'red').then();
+        }
+    })
+}

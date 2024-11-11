@@ -8,11 +8,22 @@
     max-width: 400px;
 }
 
+.card-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .item-card h1 {
     font-size: 24px;
     color: #333;
-    margin-bottom: 20px;
-    text-align: center;
+    text-align: left;
+    display: inline-block;
+}
+
+.delete-button-container {
+    display: inline-block;
 }
 
 .item-details .detail {

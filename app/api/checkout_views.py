@@ -73,8 +73,9 @@ def return_checkout(checkout_id):
     if user.employee_id != checkout.employee_id and not user.is_admin:
         return jsonify({'error': 'Only the assigned employee or an admin can return checkout'}), 403
 
+    next = request.args.get('next')
     returned_checkout = checkout_model.return_checkout(checkout_id)
-    return jsonify(returned_checkout.to_dict()), 200
+    return redirect(next or url_for('main.checkout_details', checkout_id=checkout_id))
 
 
 @api.route('/checkouts/<int:checkout_id>/', methods=['DELETE'])

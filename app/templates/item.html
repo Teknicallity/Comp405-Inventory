@@ -8,7 +8,22 @@
 
 {% block main %}
     <div class="item-card" style="margin: auto">
-        <h1 id="objectName">{% if item %}{{ item.name }}{% else %}Create Item{% endif %}</h1>
+        <div class="card-header-container">
+            <h1 id="objectName">{% if item %}{{ item.name }}{% else %}Create Item{% endif %}</h1>
+            {% if item %}
+                <div class="delete-button-container">
+                    <button type="button" id="deleteButton" class="btn btn-danger shadow-none"
+                            onclick="deleteObject('{{ url_for('api.delete_item', item_id=item.item_id) }}')">
+                        Delete
+                    </button>
+                    <button type="button" id="cancelDeleteButton" class="btn btn-secondary shadow-none"
+                            style="display: none;"
+                            onclick="cancelDelete()">
+                        Cancel
+                    </button>
+                </div>
+            {% endif %}
+        </div>
         <form id="objectForm">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
             <div class="item-details">

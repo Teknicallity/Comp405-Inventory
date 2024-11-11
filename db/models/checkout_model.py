@@ -94,7 +94,7 @@ def return_checkout(checkout_id: int) -> CheckoutModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''UPDATE checkouts SET returned_date = NOW() WHERE checkout_id = %s''', (checkout_id,))
-        db.commit()
+    db.commit()
     return get_checkout_by_id(checkout_id)
 
 

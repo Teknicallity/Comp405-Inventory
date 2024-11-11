@@ -8,7 +8,22 @@
 
 {% block main %}
     <div class="item-card" style="margin: auto">
-        <h1 id="objectName">{% if checkout %}{{ checkout.checkout_id }}{% else %}Create Checkout{% endif %}</h1>
+        <div class="card-header-container">
+            <h1 id="objectName">{% if checkout %}Checkout {{ checkout.checkout_id }}{% else %}Create Checkout{% endif %}</h1>
+            {% if checkout %}
+                <div class="delete-button-container">
+                    <button type="button" id="deleteButton" class="btn btn-danger shadow-none"
+                            onclick="deleteObject('{{ url_for('api.delete_checkout', checkout_id=checkout.checkout_id) }}')">
+                        Delete
+                    </button>
+                    <button type="button" id="cancelDeleteButton" class="btn btn-secondary shadow-none"
+                            style="display: none;"
+                            onclick="cancelDelete()">
+                        Cancel
+                    </button>
+                </div>
+            {% endif %}
+        </div>
         <form id="objectForm">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
             <div class="item-details">
@@ -45,17 +60,17 @@
             <p id="responseText"></p>
             <div class="primary-action-container">
                 {% if (checkout and current_user.employee_id == checkout.employee_id) or (current_user.is_authenticated and current_user.is_admin) %}
-                    {% if checkout %}
-                        <button type="button" id="cancelButton" class="btn btn-secondary shadow-none"
-                                style="display: none;"
-                                onclick="cancelEdit(`{{ url_for("api.get_checkout", checkout_id=checkout.checkout_id) }}`)">
-                            Cancel
+                    {% if checkout and checkout.returned_date in (None, "") %}
+                        <button type="button" id="returnButton" class="btn btn-primary shadow-none"
+                                onclick="returnCheckout('{{ url_for("api.return_checkout", checkout_id=checkout.checkout_id) }}')">
+                            Return Checkout
+                        </button>
+                    {% elif not checkout %}
+                        <button type="button" id="editButton" class="btn btn-success shadow-none"
+                                onclick="toggleEdit('{{ url_for("api.create_checkout") }}')">
+                            Create
                         </button>
                     {% endif %}
-                    <button type="button" id="editButton" class="btn btn-success shadow-none"
-                            onclick="toggleEdit('{% if checkout %}{{ url_for("api.update_checkout", checkout_id=checkout.checkout_id) }}{% else %}{{ url_for("api.create_checkout") }}{% endif %}')">
-                        {% if checkout %}Edit{% else %}Create{% endif %}
-                    </button>
                 {% endif %}
             </div>
         </form>
