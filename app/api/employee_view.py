@@ -20,19 +20,28 @@ def create_employee():
     if not user.is_admin:
         return abort(401)
 
-    data = request.get_json()
-
+    data: dict = request.get_json()
     first_name = data['first_name'] or None
     last_name = data['last_name'] or None
     title = data['title'] or None
     reports_to_id = data['reports_to'] or None
+    username = data['username'] or None
+    password = data['password'] or None
+    is_admin = data.get('is_admin')
 
-    if not (first_name and last_name and title and reports_to_id):
+    if not (first_name and last_name and title):
         return abort(400)
 
-    employee = EmployeeModel(first_name=first_name, last_name=last_name, title=title, reports_to=reports_to_id)
+    employee = EmployeeModel(
+        first_name=first_name,
+        last_name=last_name,
+        title=title,
+        reports_to=reports_to_id,
+        username=username,
+        password=password,
+        is_admin=is_admin
+    )
     new_employee = employee_model.add_employee(employee)
-
     return jsonify(new_employee.to_dict()), 201
 
 
@@ -61,15 +70,18 @@ def update_employee(employee_id):
         'first_name': data.get('first_name'),
         'last_name': data.get('last_name'),
         'title': data.get('title'),
-        'reports_to': data.get('reports_to')
+        'reports_to': data.get('reports_to'),
+        'username': data.get('username'),
+        'password': data.get('password'),
+        'is_admin': data.get('is_admin')
     }
-
+    print('update_employee1', data)
     for field, value in fields_to_update.items():
         if value not in (None, ""):
             setattr(employee, field, value)
 
     employee_model.update_employee(employee)
-
+    print('update_employee2', employee.to_dict())
     return jsonify(employee.to_dict()), 200
 
 

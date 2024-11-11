@@ -33,11 +33,22 @@
                            value="{{ (employee.reports_to if employee) or '' }}"
                            {% if employee %}disabled{% endif %}>
                 </div>
+                <div class="detail">
+                    <label for="username" class="label">Username</label>
+                    <input type="text" id="username" name="username"
+                           value="{{ (employee.username if employee) or '' }}"
+                           {% if employee %}disabled{% endif %}>
+                </div>
+                <div class="detail">
+                    <label for="password" class="label">Password</label>
+                    <input type="text" id="password" name="password" value=""
+                    {% if employee %}disabled{% endif %}>
+                </div>
             </div>
             <input type="hidden" id="objectId" name="employee_id" value="{{ (employee.employee_id if employee) }}"
                    disabled readonly>
             <p id="responseText"></p>
-            {% if current_user.is_authenticated and current_user.is_admin%}
+            {% if current_user.is_authenticated and current_user.is_admin %}
                 <button type="button" id="editButton"
                         onclick="toggleEdit('{% if employee %}{{ url_for("api.update_employee", employee_id=employee.employee_id) }}{% else %}{{ url_for("api.create_employee") }}{% endif %}')">
                     {% if employee %}Edit{% else %}Create{% endif %}
@@ -45,7 +56,7 @@
             {% endif %}
         </form>
     </div>
-    {% if current_user.is_authenticated and current_user.is_admin%}
+    {% if current_user.is_authenticated and current_user.is_admin %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
     {% endif %}
 {% endblock %}

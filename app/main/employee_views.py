@@ -11,9 +11,8 @@ from db.models.user_model import User
 def all_employees():
     user: User = current_user
     if not user.is_admin:
-        return abort(401)
+        return abort(403)
     employees = get_all_employees()
-    print(employees[0].to_dict())
     return render_template('employee_list.html', employees=employees)
 
 
@@ -22,7 +21,7 @@ def all_employees():
 def employee_details(employee_id):
     user: User = current_user
     if not user.is_admin:
-        return abort(401)
+        return abort(403)
     employee = get_employee_by_id(employee_id)
     return render_template('employee.html', employee=employee)
 
@@ -30,4 +29,7 @@ def employee_details(employee_id):
 @main.route('/employees/create/')
 @login_required
 def create_employee():
+    user: User = current_user
+    if not user.is_admin:
+        return abort(403)
     return render_template('employee.html')
