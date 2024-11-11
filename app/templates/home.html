@@ -18,4 +18,8 @@
         <p>Welcome, Guest!</p>
         <a href="{{ url_for('auth.login') }}">Login</a>
     {% endif %}
+    <br>
+    <a href="{{ url_for('main.all_items') }}">Items</a><br>
+    <a href="{{ url_for('main.all_checkouts') }}">Checkouts</a><br>
+    <a href="{{ url_for('main.all_employees') }}">Employees</a><br>
 {% endblock %}

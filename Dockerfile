@@ -12,7 +12,8 @@ COPY requirements.txt requirements.txt
 RUN mkdir /etc/comp405-inventory/.venv && \
     python -m venv --upgrade-deps --copies /etc/comp405-inventory/.venv && \
     /etc/comp405-inventory/.venv/bin/pip install --upgrade pip wheel && \
-    /etc/comp405-inventory/.venv/bin/pip install -r requirements.txt
+    /etc/comp405-inventory/.venv/bin/pip install -r requirements.txt && \
+    /etc/comp405-inventory/.venv/bin/pip install 'uWSGI>=2.0.28'
 
 COPY . .
 
@@ -31,4 +32,6 @@ RUN chmod g+w .
 
 RUN chmod +x /etc/comp405-inventory/start.sh
 
-CMD ["/etc/comp405-inventory/start.sh"]
+RUN sed -i 's/\r$//' start.sh
+
+CMD ["sh", "/etc/comp405-inventory/start.sh"]

@@ -33,21 +33,21 @@ CREATE TABLE items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     brand VARCHAR(50),
-    model_number VARCHAR(50),
-    serial_number VARCHAR(50),
+    model VARCHAR(50),
+    serial VARCHAR(50),
     location_id INT,
-    FOREIGN KEY (location_id) REFERENCES locations (location_id) ON DELETE RESTRICT
+    status_id INT DEFAULT 1,
+    FOREIGN KEY (location_id) REFERENCES locations (location_id) ON DELETE RESTRICT,
+    FOREIGN KEY (status_id) REFERENCES statuses (status_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE checkouts (
     checkout_id INT AUTO_INCREMENT PRIMARY KEY,
-    item_id INT,
-    status_id INT,
+    item_id INT NOT NULL,
     employee_id INT,
     checkout_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     returned_date TIMESTAMP NULL,
     FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE,
-    FOREIGN KEY (status_id) REFERENCES statuses (status_id) ON DELETE SET NULL,
     FOREIGN KEY (employee_id) REFERENCES employees (employee_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
@@ -69,4 +69,6 @@ CREATE TABLE qrcodes (
     FOREIGN KEY (created_by) REFERENCES employees (employee_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
-INSERT INTO items (name) VALUES ('test tool')
+INSERT INTO statuses (name) VALUES ('Available'), ('Checked Out'), ('Missing'), ('Damaged');
+
+INSERT INTO items (name, serial) VALUES ('test tool', 'serial5612');

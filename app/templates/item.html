@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/item.css') }}">
+{% endblock %}
+
+
+{% block main %}
+    <div class="item-card" style="margin: auto">
+        <h1 id="objectName">{% if item %}{{ item.name }}{% else %}Create Item{% endif %}</h1>
+        <form id="objectForm">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+            <div class="item-details">
+                <div class="detail">
+                    <label for="name" class="label">Name:</label>
+                    <input type="text" id="name" name="name" value="{{ (item.name if item) or '' }}"
+                           {% if item %}disabled{% endif %} required>
+                </div>
+                <div class="detail">
+                    <label for="brand" class="label">Brand:</label>
+                    <input type="text" id="brand" name="brand" value="{{ (item.brand if item) or '' }}"
+                           {% if item %}disabled{% endif %}>
+                </div>
+                <div class="detail">
+                    <label for="model" class="label">Model:</label>
+                    <input type="text" id="model" name="model" value="{{ (item.model if item) or '' }}"
+                           {% if item %}disabled{% endif %}>
+                </div>
+                <div class="detail">
+                    <label for="serial" class="label">Serial:</label>
+                    <input type="text" id="serial" name="serial" value="{{ (item.serial if item) or '' }}"
+                           {% if item %}disabled{% endif %}>
+                </div>
+                <div class="detail">
+                    <label for="location_id" class="label">Location:</label>
+                    <input type="text" id="location_id" name="location_id" value="{{ (item.location_id if item) or '' }}"
+                           {% if item %}disabled{% endif %}>
+                </div>
+                <div class="detail">
+                    <label for="status_id" class="label">Status:</label>
+                    <input type="text" id="status_id" name="status_id" value="{{ (item.status_id if item) or '' }}"
+                           {% if item %}disabled{% endif %}>
+                </div>
+            </div>
+            <input type="hidden" id="objectId" name="item_id" value="{{ item.item_id if item }}" disabled readonly>
+            <p id="responseText"></p>
+            {% if current_user.is_authenticated %}
+                <button type="button" id="editButton"
+                        onclick="toggleEdit('{% if item %}{{ url_for("api.update_item", item_id=item.item_id) }}{% else %}{{ url_for("api.create_item") }}{% endif %}')">
+                    {% if item %}Edit{% else %}Create{% endif %}
+                </button>
+            {% endif %}
+        </form>
+    </div>
+    {% if current_user.is_authenticated %}
+        <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
+    {% endif %}
+{% endblock %}

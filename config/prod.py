@@ -13,7 +13,7 @@ class ProdConfig(BaseConfig):
         SECRET_KEY = secrets.token_hex()
 
     MYSQL_HOST = os.environ.get('MYSQL_HOST', 'localhost')
-    MYSQL_PORT = os.environ.get('MYSQL_PORT', 3306)
+    MYSQL_PORT = int(os.environ.get('MYSQL_PORT', 3306))
     # DATABASE_CONNECTION = f"mysql://{MYSQL_HOST}:{MYSQL_PORT}"
     MYSQL_USER = os.environ.get('MYSQL_USER', 'your_user')
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', 'your_password')
@@ -21,6 +21,7 @@ class ProdConfig(BaseConfig):
 
     ADMIN_USER = os.environ.get('ADMIN_USER', None)
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', None)
+    RETRY_DB_CONNECTION = os.getenv("RETRY_DB_CONNECTION", True)
 
     @classmethod
     def init_app(cls, app):

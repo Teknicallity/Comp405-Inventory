@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <H3>Create Item</H3>
+    <form id="createItemForm">
+        {{ create_form.csrf_token }}<br>
+        {{ create_form.name.label }} {{ create_form.name }}<br>
+        {{ create_form.brand.label }} {{ create_form.brand }}<br>
+        {{ create_form.model.label }} {{ create_form.model }}<br>
+        {{ create_form.serial.label }} {{ create_form.serial }}<br>
+
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+
+    <h3>Update Item</h3>
+    <form id="updateItemForm">
+        {{ update_form.csrf_token }}<br>
+        {{ update_form.item_id.label }} {{ update_form.item_id }}<br>
+        {{ update_form.name.label }} {{ update_form.name }}<br>
+        {{ update_form.brand.label }} {{ update_form.brand }}<br>
+        {{ update_form.model.label }} {{ update_form.model }}<br>
+        {{ update_form.serial.label }} {{ update_form.serial }}<br>
+
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+
+    <h3>Delete Item</h3>
+    <form id="deleteItemForm">
+        {{ delete_form.csrf_token }}<br>
+        {{ delete_form.item_id.label }} {{ update_form.item_id }}<br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Create Item Form
+        document.getElementById('createItemForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            const csrfToken = formData.get('csrf_token');
+
+            const response = await fetch('{{ url_for("api.create_item") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(jsonData),
+            });
+
+            if (response.ok) {
+                console.log('Form submitted successfully!');
+            } else {
+                console.error('Error submitting form.');
+            }
+        });
+    </script>
+
+    <script>
+        // Update Item form
+        document.getElementById('updateItemForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const itemId = formData.get('item_id')
+
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            const csrfToken = formData.get('csrf_token');
+
+            const response = await fetch(`/api/items/${itemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(jsonData),
+            });
+
+            if (response.ok) {
+                console.log('Form submitted successfully!');
+            } else {
+                console.error('Error submitting form.');
+            }
+        });
+    </script>
+
+    <script>
+        document.getElementById('deleteItemForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const itemId = formData.get('item_id');
+            const csrfToken = formData.get('csrf_token');
+
+            if (!itemId) {
+                console.error('Item ID is required to delete an item.');
+                return;
+            }
+
+            const response = await fetch(`/api/items/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+            });
+
+            if (response.ok) {
+                console.log('Item deleted successfully!');
+            } else {
+                console.error('Error deleting item:', response.statusText);
+            }
+        })
+    </script>
+{% endblock %}

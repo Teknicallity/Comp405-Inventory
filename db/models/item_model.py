@@ -1,18 +1,152 @@
+from flask import abort
+
 from db.connection import get_db
+
+
+class ItemModel:
+    def __init__(self, name, brand=None, model=None, serial=None, item_id=None, location_id=None, status_id=None):
+        self.item_id = item_id
+        self.name = name
+        self.brand = brand
+        self.model = model
+        self.serial = serial
+        self.location_id = location_id
+        self.status_id = status_id
+
+
+    @classmethod
+    def from_row(cls, row):
+        return cls(
+            item_id=row[0],
+            name=row[1],
+            brand=row[2],
+            model=row[3],
+            serial=row[4],
+            location_id=row[5],
+            status_id=row[6]
+        )
+
+    @classmethod
+    def list_from_rows(cls, rows) -> list:
+        item_list = []
+        for item in rows:
+            item_list.append(ItemModel.from_row(item))
+        return item_list
+
+    def to_dict(self):
+        # Convert the object attributes to a dictionary
+        return {
+            "item_id": self.item_id,
+            "name": self.name,
+            "brand": self.brand,
+            "model": self.model,
+            "serial": self.serial,
+            "location_id": self.location_id,
+            "status_id": self.status_id
+        }
 
 
 def get_all_items():
     db = get_db()
     with db.cursor() as cursor:
-        cursor.execute('SELECT * FROM items')
-        return cursor.fetchall()
+        cursor.execute('''
+            SELECT i.item_id, i.name, i.brand, i.model, i.serial, i.location_id, i.status_id
+            FROM items i
+        ''')
+        return ItemModel.list_from_rows(cursor.fetchall())
 
 
-def add_item(name, brand, model_number, serial_number):
+def get_item_by_id(item_id: int):
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute(f'''
+            SELECT i.item_id, i.name, i.brand, i.model, i.serial, i.location_id, i.status_id
+            FROM items i
+            WHERE item_id = {item_id}
+        ''')
+        row = cursor.fetchone()
+        return ItemModel.from_row(row) if row else None
+
+
+def add_item(item: ItemModel) -> ItemModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO items (name, brand, model_number, serial_number) VALUES (?, ?, ?, ?)',
-            (name, brand, model_number, serial_number)
+            'INSERT INTO items (name, brand, model, serial) VALUES (%s, %s, %s, %s)',
+            (item.name, item.brand, item.model, item.serial)
         )
+        item_id = cursor.lastrowid
     db.commit()
+    return ItemModel(item_id=item_id, name=item.name, brand=item.brand, model=item.model,
+                     serial=item.serial)
+
+
+def update_item(item: ItemModel):
+    db = get_db()
+    with db.cursor() as cursor:
+        query = 'UPDATE items SET'
+        updates = []
+        params = []
+
+        if item.name is not None:
+            updates.append(' name = %s')
+            params.append(item.name)
+
+        if item.brand is not None:
+            updates.append(' brand = %s')
+            params.append(item.brand)
+
+        if item.model is not None:
+            updates.append(' model = %s')
+            params.append(item.model)
+
+        if item.serial is not None:
+            updates.append(' serial = %s')
+            params.append(item.serial)
+
+        if item.location_id is not None:
+            updates.append(' location_id = %s')
+            params.append(item.location_id)
+
+        if item.status_id is not None:
+            updates.append(' status_id = %s')
+            params.append(item.status_id)
+
+        if updates:
+            query += ','.join(updates) + ' WHERE item_id = %s'
+            params.append(item.item_id)
+            cursor.execute(query, tuple(params))
+            db.commit()
+
+
+def delete_item(item_id: int):
+    db = get_db()
+
+    with db.cursor() as cursor:
+        cursor.execute(f'DELETE FROM items WHERE item_id = {item_id}')
+    db.commit()
+
+
+def get_items_by_filters(brand=None, model=None, serial=None):
+    db = get_db()
+    query = '''
+        SELECT i.item_id, i.name, i.brand, i.model, i.serial, i.location_id, i.status_id 
+        FROM items i 
+        WHERE 1=1'''
+    values = []
+
+    if brand:
+        query += " AND brand LIKE ?"
+        values.append(f"%{brand}%")
+    if model:
+        query += " AND model = ?"
+        values.append(model)
+    if serial:
+        query += " AND serial = ?"
+        values.append(serial)
+
+    with db.cursor() as cursor:
+        cursor.execute(query, tuple(values))
+        item_tuples = cursor.fetchall()
+
+    return ItemModel.list_from_rows(item_tuples)

@@ -1,13 +1,29 @@
 version: "3"
 services:
   comp405-inventory:
+    image: comp-inventory
     ports:
       - "8198:8198"
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "changeme"
-#  mysql-inventory:
-#    image: "mysql/mysql-server:8.0.40-bookworm"
-#    restart: always
-#    environment:
-#      MYSQL_ROOT_PASSWORD: "changeme"
+      MYSQL_HOST: "mysql-inventory"
+      MYSQL_PORT: 3306
+      MYSQL_USER: "comp405"
+      MYSQL_PASSWORD: "changeme-db"
+      MYSQL_DATABASE: "inventory_system"
+      ADMIN_USER: "root"
+      ADMIN_PASSWORD: "changeme"
+      RESET_ON_RESTART: "yes"
+    depends_on:
+      - mysql-inventory
+
+  mysql-inventory:
+    image: "mysql:8.0.40-bookworm"
+    restart: always
+    environment:
+      MYSQL_USER: "comp405"
+      MYSQL_PASSWORD: "changeme-db"
+      MYSQL_DATABASE: "inventory_system"
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - ./mysql_comp405_inventory:/var/lib/mysql

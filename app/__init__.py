@@ -1,4 +1,6 @@
-from flask import Flask
+from functools import wraps
+
+from flask import Flask, current_app, abort
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -30,3 +32,14 @@ def create_app():
     app.register_blueprint(api_blueprint, url_prefix='/api')
 
     return app
+
+
+def debug_only(f):
+    @wraps(f)
+    def wrapped(**kwargs):
+        if not current_app.debug:
+            abort(404)
+
+        return f(**kwargs)
+
+    return wrapped

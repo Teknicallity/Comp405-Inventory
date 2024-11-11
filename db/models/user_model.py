@@ -19,9 +19,26 @@ class User(UserMixin):
         return cls(
             username=row[1],
             password_hash=row[2],
-            is_admin=row[3],
+            is_admin=row[3] == 1,
             employee_id=row[4]
         )
+
+    @classmethod
+    def list_from_rows(cls, rows):
+        return [cls.from_db_row(row) for row in rows]
+
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'is_admin': self.is_admin,
+            'employee_id': self.employee_id
+        }
+
+
+def get_all_users():
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute('SELECT * FROM users')
 
 
 def add_user(username, password, is_admin, employee_id=None):

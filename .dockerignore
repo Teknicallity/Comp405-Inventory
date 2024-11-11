@@ -1,7 +1,12 @@
 *
 
 !/app
+!/config
+/config/dev.py
+/config/test.py
+!/db
 !/inventory-system.py
+!/LICENSE
 !/requirements.txt
 !/setup-inventory.sql
 !/start.sh
