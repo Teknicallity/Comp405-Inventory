@@ -75,13 +75,13 @@ def update_employee(employee_id):
         'password': data.get('password'),
         'is_admin': data.get('is_admin')
     }
-    print('update_employee1', data)
+
     for field, value in fields_to_update.items():
         if value not in (None, ""):
             setattr(employee, field, value)
 
     employee_model.update_employee(employee)
-    print('update_employee2', employee.to_dict())
+
     return jsonify(employee.to_dict()), 200
 
 

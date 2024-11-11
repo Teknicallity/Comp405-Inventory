@@ -54,10 +54,6 @@ def add_user(username, password, is_admin, employee_id=None):
 
 def update_user(employee_id, username=None, password=None, is_admin=None):
     db = get_db()
-    print('employee_id', employee_id)
-    print('username', username)
-    print('password', password)
-    print('is_admin', is_admin)
     with db.cursor() as cursor:
         if password is not None:
             password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
