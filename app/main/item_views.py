@@ -16,3 +16,9 @@ def all_items():
 def item_details(item_id):
     item = get_item_by_id(item_id)
     return render_template('item.html', item=item)
+
+
+@main.route('/inventory/items/create')
+@login_required
+def create_item():
+    return render_template('item.html')

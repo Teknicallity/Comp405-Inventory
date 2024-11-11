@@ -5,8 +5,10 @@ function toggleEdit(url) {
     const csrfToken = document.getElementById('csrf_token').value;
     const objectNameHeader = document.getElementById('objectName');
     const objectNameInput = document.getElementById('name');
+    const objectIdElement = document.getElementById('objectId');
+    const objectIdType = objectIdElement.getAttribute('name');
     console.log('toggle')
-    if (editButton.textContent === 'Edit') {
+    if (editButton.textContent.trim() === 'Edit') {
         // Enable inputs for editing
         inputs.forEach(input => {
             if (input.id !== 'objectId') input.disabled = false;
@@ -19,9 +21,10 @@ function toggleEdit(url) {
         const formData = {};
         inputs.forEach(input => formData[input.name] = input.value);
 
+        const method = (editButton.textContent === 'Save') ? 'PUT' : 'POST';
         console.log(formData)
         fetch(`${url}`, {
-            method: 'PUT',
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
@@ -30,11 +33,27 @@ function toggleEdit(url) {
         })
             .then(response => {
                 if (response.ok) {
-                    // Disable inputs after saving
-                    inputs.forEach(input => input.disabled = true);
-                    editButton.textContent = 'Edit';
-                    objectNameHeader.innerHTML = objectNameInput.value
-                    flashResponseText('Updated successfully.', 'darkgreen').then();
+                    if (method === 'PUT') {
+                        // Update object
+                        inputs.forEach(input => input.disabled = true);
+                        editButton.textContent = 'Edit';
+                        objectNameHeader.innerHTML = objectNameInput.value;
+
+                        response.json().then(data => {
+                            inputs.forEach(input => {
+                                if (input.name in data) {
+                                    input.value = data[input.name];
+                                }
+                            });
+                            flashResponseText('Updated successfully.', 'darkgreen').then();
+                        });
+                    } else {
+                        // Create object
+                        inputs.forEach(input => input.value = '');
+                        flashResponseText('Created successfully.', 'darkgreen').then();
+                    }
+
+
                 } else if (response.status === 401) {
                     flashResponseText('Unauthorized', 'red').then();
                 } else {
