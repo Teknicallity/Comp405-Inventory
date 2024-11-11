@@ -21,3 +21,9 @@ def checkout_details(checkout_id):
     # user: User = current_user
     checkout = checkout_model.get_checkout_by_id(checkout_id)
     return render_template('checkout.html', checkout=checkout)
+
+
+@main.route('/checkouts/create/')
+@login_required
+def create_checkout():
+    return render_template('checkout.html')

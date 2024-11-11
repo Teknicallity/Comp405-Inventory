@@ -13,14 +13,18 @@ def all_checkouts():
     return jsonify(list(map((lambda checkout: checkout.to_dict()), checkouts))), 200
 
 
-@api.route('/checkouts/<int:checkout_id>/', methods=['POST'])
+@api.route('/checkouts/', methods=['POST'])
 @login_required
-def create_checkout(checkout_id):
+def create_checkout():
     user: User = current_user
     data = request.get_json()
 
     item_id = data.get('item_id')
-    employee_id = user.employee_id
+    if user.is_admin:
+        e_id = data.get('employee_id')
+        employee_id = e_id if e_id not in (None, "") else user.employee_id
+    else:
+        employee_id = user.employee_id
     checkout = CheckoutModel(item_id=item_id, employee_id=employee_id)
     new_checkout = checkout_model.create_checkout(checkout)
 
@@ -41,8 +45,8 @@ def update_checkout(checkout_id):
     user: User = current_user
     checkout = checkout_model.get_checkout_by_id(checkout_id)
 
-    if not user.is_admin:
-        return jsonify({'error': 'Only an admin can update checkout'}), 403
+    if not user.is_admin and user.employee_id != checkout.employee_id:
+        return jsonify({'error': 'Only an admin or checkout owner can update checkout'}), 403
 
     data = request.get_json()
     fields_to_update = {

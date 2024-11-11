@@ -8,7 +8,7 @@
 
 {% block main %}
     {% if current_user.is_authenticated %}
-        <button href="">Create</button>
+        <a href="{{ url_for('main.create_item') }}">Create</a>
     {% endif %}
     <div class="table-container" style="max-width: 1500px; margin: auto">
         <table>

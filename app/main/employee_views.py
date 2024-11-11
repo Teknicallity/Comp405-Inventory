@@ -25,3 +25,9 @@ def employee_details(employee_id):
         return abort(401)
     employee = get_employee_by_id(employee_id)
     return render_template('employee.html', employee=employee)
+
+
+@main.route('/employees/create/')
+@login_required
+def create_employee():
+    return render_template('employee.html')
