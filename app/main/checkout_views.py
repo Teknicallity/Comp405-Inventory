@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, abort
 from flask_login import login_required, current_user
 
 from app.main import main
@@ -20,6 +20,8 @@ def all_checkouts():
 def checkout_details(checkout_id):
     # user: User = current_user
     checkout = checkout_model.get_checkout_by_id(checkout_id)
+    if checkout is None:
+        abort(404)
     return render_template('checkout.html', checkout=checkout)
 
 

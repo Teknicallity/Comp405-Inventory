@@ -23,6 +23,8 @@ def employee_details(employee_id):
     if not user.is_admin:
         return abort(403)
     employee = get_employee_by_id(employee_id)
+    if employee is None:
+        return abort(404)
     return render_template('employee.html', employee=employee)
 
 
