@@ -2,21 +2,21 @@ function toggleEdit(url) {
     const form = document.getElementById('objectForm');
     const inputs = form.querySelectorAll('input');
     const editButton = document.getElementById('editButton');
+    const cancelButton = document.getElementById('cancelButton');
     const csrfToken = document.getElementById('csrf_token').value;
     const objectNameHeader = document.getElementById('objectName');
     const objectNameInput = document.getElementById('name');
     const objectIdElement = document.getElementById('objectId');
     const objectIdType = objectIdElement.getAttribute('name');
-    console.log('toggle')
+
     if (editButton.textContent.trim() === 'Edit') {
         // Enable inputs for editing
         inputs.forEach(input => {
             if (input.id !== 'objectId') input.disabled = false;
         });
         editButton.textContent = 'Save';
-        console.log('editButton');
+        cancelButton.style.display = 'inline';
     } else {
-        console.log('saving')
         // Gather form data and send a PUT request
         const formData = {};
         inputs.forEach(input => {
@@ -43,6 +43,7 @@ function toggleEdit(url) {
                         // Update object
                         inputs.forEach(input => input.disabled = true);
                         editButton.textContent = 'Edit';
+                        cancelButton.style.display = 'none';
                         objectNameHeader.innerHTML = objectNameInput.value;
 
                         response.json().then(data => {
@@ -81,4 +82,39 @@ async function flashResponseText(text, color) {
         responseText.style.color = color;
         responseText.innerHTML = '';
     }, 1500)
+}
+
+function cancelEdit(getObjectFromIdUrl) {
+    const form = document.getElementById('objectForm');
+    const inputs = form.querySelectorAll('input');
+    const editButton = document.getElementById('editButton');
+    const cancelButton = document.getElementById('cancelButton');
+
+    inputs.forEach(input => input.disabled = true);
+
+    editButton.textContent = 'Edit';
+    cancelButton.style.display = 'none';
+
+    fetch(`${getObjectFromIdUrl}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch original data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            inputs.forEach(input => {
+                if (data.hasOwnProperty(input.name)) {
+                    if (input.type === 'checkbox') {
+                        input.checked = data[input.name];
+                    } else {
+                        input.value = data[input.name];
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching original data:', error);
+            flashResponseText('Failed to reset changes.', 'red').then();
+        });
 }

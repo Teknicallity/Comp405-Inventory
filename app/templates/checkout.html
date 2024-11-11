@@ -18,33 +18,46 @@
                            {% if checkout %}disabled{% endif %}>
                 </div>
                 {% if current_user.is_admin %}
-                <div class="detail">
-                    <label for="employee_id" class="label">Employee_id:</label>
-                    <input type="text" id="employee_id" name="employee_id" value="{{ (checkout.employee_id if checkout) or '' }}"
-                           {% if checkout %}disabled{% endif %}>
-                </div>
+                    <div class="detail">
+                        <label for="employee_id" class="label">Employee_id:</label>
+                        <input type="text" id="employee_id" name="employee_id"
+                               value="{{ (checkout.employee_id if checkout) or '' }}"
+                               {% if checkout %}disabled{% endif %}>
+                    </div>
                 {% endif %}
                 {% if checkout %}
-                <div class="detail">
-                    <label for="checkout_date" class="label">Checkout Date:</label>
-                    <input type="text" id="checkout_date" name="checkout_date" value="{{ (checkout.checkout_date if checkout) or '' }}"
-                           disabled readonly>
-                </div>
-                <div class="detail">
-                    <label for="returned_date" class="label">Returned Date:</label>
-                    <input type="text" id="returned_date" name="returned_date" value="{{ (checkout.returned_date if checkout) or '' }}"
-                           disabled readonly>
-                </div>
+                    <div class="detail">
+                        <label for="checkout_date" class="label">Checkout Date:</label>
+                        <input type="text" id="checkout_date" name="checkout_date"
+                               value="{{ (checkout.checkout_date if checkout) or '' }}"
+                               disabled readonly>
+                    </div>
+                    <div class="detail">
+                        <label for="returned_date" class="label">Returned Date:</label>
+                        <input type="text" id="returned_date" name="returned_date"
+                               value="{{ (checkout.returned_date if checkout) or '' }}"
+                               disabled readonly>
+                    </div>
                 {% endif %}
             </div>
-            <input type="hidden" id="objectId" name="checkout_id" value="{{ checkout.checkout_id if checkout }}" disabled readonly>
+            <input type="hidden" id="objectId" name="checkout_id" value="{{ checkout.checkout_id if checkout }}"
+                   disabled readonly>
             <p id="responseText"></p>
-            {% if (checkout and current_user.employee_id == checkout.employee_id) or (current_user.is_authenticated and current_user.is_admin) %}
-            <button type="button" id="editButton"
-                    onclick="toggleEdit('{% if checkout %}{{ url_for("api.update_checkout", checkout_id=checkout.checkout_id) }}{% else %}{{ url_for("api.create_checkout") }}{% endif %}')">
-                {% if checkout %}Edit{% else %}Create{% endif %}
-            </button>
-            {% endif %}
+            <div class="primary-action-container">
+                {% if (checkout and current_user.employee_id == checkout.employee_id) or (current_user.is_authenticated and current_user.is_admin) %}
+                    {% if checkout %}
+                        <button type="button" id="cancelButton" class="btn btn-secondary shadow-none"
+                                style="display: none;"
+                                onclick="cancelEdit(`{{ url_for("api.get_checkout", checkout_id=checkout.checkout_id) }}`)">
+                            Cancel
+                        </button>
+                    {% endif %}
+                    <button type="button" id="editButton" class="btn btn-success shadow-none"
+                            onclick="toggleEdit('{% if checkout %}{{ url_for("api.update_checkout", checkout_id=checkout.checkout_id) }}{% else %}{{ url_for("api.create_checkout") }}{% endif %}')">
+                        {% if checkout %}Edit{% else %}Create{% endif %}
+                    </button>
+                {% endif %}
+            </div>
         </form>
     </div>
     {% if (checkout and current_user.employee_id == checkout.employee_id) or (current_user.is_authenticated and current_user.is_admin) %}

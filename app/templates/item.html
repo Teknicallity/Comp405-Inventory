@@ -34,7 +34,8 @@
                 </div>
                 <div class="detail">
                     <label for="location_id" class="label">Location:</label>
-                    <input type="text" id="location_id" name="location_id" value="{{ (item.location_id if item) or '' }}"
+                    <input type="text" id="location_id" name="location_id"
+                           value="{{ (item.location_id if item) or '' }}"
                            {% if item %}disabled{% endif %}>
                 </div>
                 <div class="detail">
@@ -45,12 +46,21 @@
             </div>
             <input type="hidden" id="objectId" name="item_id" value="{{ item.item_id if item }}" disabled readonly>
             <p id="responseText"></p>
-            {% if current_user.is_authenticated %}
-                <button type="button" id="editButton"
-                        onclick="toggleEdit('{% if item %}{{ url_for("api.update_item", item_id=item.item_id) }}{% else %}{{ url_for("api.create_item") }}{% endif %}')">
-                    {% if item %}Edit{% else %}Create{% endif %}
-                </button>
-            {% endif %}
+            <div class="primary-action-container">
+                {% if current_user.is_authenticated %}
+                    {% if item %}
+                        <button type="button" id="cancelButton" class="btn btn-secondary shadow-none"
+                                style="display: none;"
+                                onclick="cancelEdit(`{{ url_for("api.get_single_item", item_id=item.item_id) }}`)">
+                            Cancel
+                        </button>
+                    {% endif %}
+                    <button type="button" id="editButton" class="btn btn-success shadow-none"
+                            onclick="toggleEdit('{% if item %}{{ url_for("api.update_item", item_id=item.item_id) }}{% else %}{{ url_for("api.create_item") }}{% endif %}')">
+                        {% if item %}Edit{% else %}Create{% endif %}
+                    </button>
+                {% endif %}
+            </div>
         </form>
     </div>
     {% if current_user.is_authenticated %}
