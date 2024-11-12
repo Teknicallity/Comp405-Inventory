@@ -77,5 +77,6 @@
     </div>
     {% if (checkout and current_user.employee_id == checkout.employee_id) or (current_user.is_authenticated and current_user.is_admin) %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
+        <script src="{{ url_for('static', filename='javascript/checkout.js') }}"></script>
     {% endif %}
 {% endblock %}

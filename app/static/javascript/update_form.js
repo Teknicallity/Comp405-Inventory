@@ -74,16 +74,6 @@ function toggleEdit(url) {
     }
 }
 
-async function flashResponseText(text, color) {
-    const responseText = document.getElementById('responseText');
-    responseText.style.color = color;
-    responseText.innerHTML = text;
-    setTimeout(() => {
-        responseText.style.color = color;
-        responseText.innerHTML = '';
-    }, 1500)
-}
-
 function cancelEdit(getObjectFromIdUrl) {
     const form = document.getElementById('objectForm');
     const inputs = form.querySelectorAll('input');
@@ -135,14 +125,18 @@ function deleteObject(deleteUrl) {
                 'X-CSRFToken': csrfToken
             }
         }).then(response => {
-            if (response.redirected) {
-                window.location.href = response.url;
+            if (response.ok) {
+                return response.json()
             } else if (response.status === 404) {
                 flashResponseText('Item not found.', 'red').then();
             } else if (response.status === 403 || response.status === 401) {
                 flashResponseText('You are not authorized to delete this item.', 'red').then();
             } else {
                 flashResponseText('Failed to delete the item.', 'red').then();
+            }
+        }).then(data => {
+            if (data && data.next_url) {
+                window.location.href = data.next_url;
             }
         }).catch(error => {
             console.error('Error during deletion:', error);
@@ -157,27 +151,4 @@ function cancelDelete() {
 
     deleteButton.textContent = 'Delete'
     cancelDeleteButton.style.display = 'none';
-}
-
-function returnCheckout(returnUrl) {
-    const csrfToken = document.getElementById('csrf_token').value
-    const returnButton = document.getElementById('returnButton')
-
-    fetch(returnUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        }
-    }).then(response => {
-        if (response.redirected) {
-            window.location.href = response.url;
-        } else if (response.status === 404) {
-            flashResponseText('Item not found.', 'red').then();
-        } else if (response.status === 403 || response.status === 401) {
-            flashResponseText('You are not authorized to return this item.', 'red').then();
-        } else {
-            flashResponseText('Failed to return the item.', 'red').then();
-        }
-    })
 }
