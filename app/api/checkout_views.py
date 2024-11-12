@@ -91,4 +91,4 @@ def delete_checkout(checkout_id):
     return jsonify({
         'message': 'Checkout deleted successfully',
         'next_url': next or url_for('main.all_checkouts')
-    })
+    }), 200

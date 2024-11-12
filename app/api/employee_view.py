@@ -97,4 +97,4 @@ def delete_employee(employee_id):
     return jsonify({
         'message': 'Employee deleted successfully',
         'next_url': next or url_for('main.all_employees')
-    })
+    }), 200

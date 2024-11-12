@@ -80,7 +80,7 @@ def delete_item(item_id):
     return jsonify({
         'message': 'Item deleted successfully',
         'next_url': next or url_for('main.all_items')
-    })
+    }), 200
 
 
 @api.route('/itemtest/', methods=['GET'])
