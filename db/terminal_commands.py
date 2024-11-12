@@ -57,7 +57,7 @@ def ensure_admin():
                 current_app.config['ADMIN_PASSWORD'],
                 True,
             )
-            click.echo(f'Created admin user "{current_app.config['ADMIN_USER']}" from environment')
+            click.echo(f'Created admin user "{current_app.config["ADMIN_USER"]}" from environment')
         else:
             click.echo('Environment defined admin user exists')
     else:

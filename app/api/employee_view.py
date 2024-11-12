@@ -1,4 +1,4 @@
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, redirect, url_for
 from flask_login import login_required, current_user
 
 from db.models.employee_model import EmployeeModel
@@ -89,8 +89,12 @@ def update_employee(employee_id):
 @login_required
 def delete_employee(employee_id):
     employee = employee_model.get_employee_by_id(employee_id)
+    next = request.args.get('next')
     if not employee:
         return jsonify({'message': 'Employee not found'}), 404
 
     employee_model.delete_employee(employee.employee_id)
-    return jsonify(employee.to_dict()), 200
+    return jsonify({
+        'message': 'Employee deleted successfully',
+        'next_url': next or url_for('main.all_employees')
+    }), 200

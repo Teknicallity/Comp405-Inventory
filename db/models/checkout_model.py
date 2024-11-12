@@ -19,7 +19,7 @@ class CheckoutModel:
             employee_id=row[2],
             checkout_date=row[3],
             returned_date=row[4]
-        )
+        ) if row else None
 
     @classmethod
     def list_from_rows(cls, rows) -> list:
@@ -94,7 +94,7 @@ def return_checkout(checkout_id: int) -> CheckoutModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''UPDATE checkouts SET returned_date = NOW() WHERE checkout_id = %s''', (checkout_id,))
-        db.commit()
+    db.commit()
     return get_checkout_by_id(checkout_id)
 
 

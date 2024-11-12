@@ -3,12 +3,28 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/item.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/qrcode_label.css') }}">
 {% endblock %}
 
 
 {% block main %}
     <div class="item-card" style="margin: auto">
-        <h1 id="objectName">{% if item %}{{ item.name }}{% else %}Create Item{% endif %}</h1>
+        <div class="card-header-container">
+            <h1 id="objectName">{% if item %}{{ item.name }}{% else %}Create Item{% endif %}</h1>
+            {% if item %}
+                <div class="delete-button-container">
+                    <button type="button" id="deleteButton" class="btn btn-danger shadow-none"
+                            onclick="deleteObject('{{ url_for('api.delete_item', item_id=item.item_id) }}')">
+                        Delete
+                    </button>
+                    <button type="button" id="cancelDeleteButton" class="btn btn-secondary shadow-none"
+                            style="display: none;"
+                            onclick="cancelDelete()">
+                        Cancel
+                    </button>
+                </div>
+            {% endif %}
+        </div>
         <form id="objectForm">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
             <div class="item-details">
@@ -34,7 +50,8 @@
                 </div>
                 <div class="detail">
                     <label for="location_id" class="label">Location:</label>
-                    <input type="text" id="location_id" name="location_id" value="{{ (item.location_id if item) or '' }}"
+                    <input type="text" id="location_id" name="location_id"
+                           value="{{ (item.location_id if item) or '' }}"
                            {% if item %}disabled{% endif %}>
                 </div>
                 <div class="detail">
@@ -45,15 +62,56 @@
             </div>
             <input type="hidden" id="objectId" name="item_id" value="{{ item.item_id if item }}" disabled readonly>
             <p id="responseText"></p>
-            {% if current_user.is_authenticated %}
-                <button type="button" id="editButton"
-                        onclick="toggleEdit('{% if item %}{{ url_for("api.update_item", item_id=item.item_id) }}{% else %}{{ url_for("api.create_item") }}{% endif %}')">
-                    {% if item %}Edit{% else %}Create{% endif %}
-                </button>
-            {% endif %}
+            <div class="primary-action-container">
+                {% if current_user and current_user.is_authenticated %}
+                    {% if item %}
+                        <button type="button" id="cancelButton" class="btn btn-secondary shadow-none"
+                                style="display: none;"
+                                onclick="cancelEdit(`{{ url_for("api.get_single_item", item_id=item.item_id) }}`)">
+                            Cancel
+                        </button>
+                    {% endif %}
+                    <button type="button" id="editButton" class="btn btn-success shadow-none"
+                            onclick="toggleEdit('{% if item %}{{ url_for("api.update_item", item_id=item.item_id) }}{% else %}{{ url_for("api.create_item") }}{% endif %}')">
+                        {% if item %}Edit{% else %}Create{% endif %}
+                    </button>
+                {% endif %}
+            </div>
         </form>
     </div>
-    {% if current_user.is_authenticated %}
+    {% if current_user and current_user.is_authenticated %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
+    {% endif %}
+{% endblock %}
+
+{% block printable %}
+    {% if item and current_user and current_user.is_authenticated %}
+        <script src="{{ url_for('static', filename='javascript/qrcode/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='javascript/qrcode/qrcode.js') }}"></script>
+
+        <div id="printableLabel">
+            <div id="qrcode"></div>
+            <div class="label-text">
+                <h1 class="label-name">
+                    {{ item.name }}
+                </h1>
+                {% if item.location_id %}
+                    <h2 class="label-item-location">
+                        {{ item.location_id }}
+                    </h2>
+                {% endif %}
+            </div>
+        </div>
+
+        <button id="printButton" onclick="window.print()">Print</button>
+
+        <script type="text/javascript">
+            new QRCode(document.getElementById("qrcode"), {
+                text: "http://jindo.dev.naver.com/collie",
+                width: 128,
+                height: 128,
+                {#correctionLevel: QRCode.CorrectLevel.M#}
+            });
+        </script>
     {% endif %}
 {% endblock %}
