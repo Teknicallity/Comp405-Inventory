@@ -59,16 +59,6 @@ CREATE TABLE documentation (
     FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE qrcodes (
-    uuid CHAR(36) PRIMARY KEY ,
-    item_id INT,
-    created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    last_used_date TIMESTAMP NULL,
-    created_by INT,
-    FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES employees (employee_id) ON DELETE SET NULL
-) ENGINE=InnoDB;
-
 INSERT INTO statuses (name) VALUES ('Available'), ('Checked Out'), ('Missing'), ('Damaged');
 
 INSERT INTO items (name, serial) VALUES ('test tool', 'serial5612');
