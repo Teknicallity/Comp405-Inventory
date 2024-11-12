@@ -1,11 +1,11 @@
 
-.printable-label {
+#printableLabel {
     display: flex;
     flex-direction: row;
 }
 
-#qrcode, #qrcode>img{
-    display: inline !important;
+#qrcode, #qrcode > img {
+    display: inline;
 }
 
 .label-text {
@@ -13,4 +13,26 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.label-text h1, .label-text h2 {
+    margin: 0;
+}
+
+@media print {
+    body * {
+        display: none;
+    }
+
+    #printableLabel {
+    display: flex;
+    flex-direction: row;
+    }
+
+    .label-text * {
+        margin: 0 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }

@@ -86,8 +86,9 @@
     {% if item and current_user and current_user.is_authenticated %}
         <script src="{{ url_for('static', filename='javascript/qrcode/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='javascript/qrcode/qrcode.js') }}"></script>
+{#        <script src="{{ url_for('static', filename='javascript/print_label.js') }}"></script>#}
 
-        <div class="printable-label">
+        <div id="printableLabel">
             <div id="qrcode"></div>
             <div class="label-text">
                 <h1 class="label-name">
@@ -98,7 +99,15 @@
                 </h2>
             </div>
         </div>
+        <button id="printButton">Print</button>
         <script type="text/javascript">
+            function printLabel() {
+                let areaToPrint = document.getElementById('printableLabel');
+                areaToPrint.classList.add('print-area');
+                window.print();
+            }
+            document.getElementById('printButton').addEventListener('click', printLabel);
+
             new QRCode(document.getElementById("qrcode"), {
                 text: "http://jindo.dev.naver.com/collie",
                 width: 128,
