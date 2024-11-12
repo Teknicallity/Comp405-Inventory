@@ -94,4 +94,7 @@ def delete_employee(employee_id):
         return jsonify({'message': 'Employee not found'}), 404
 
     employee_model.delete_employee(employee.employee_id)
-    return redirect(next or url_for('main.all_employees'))
+    return jsonify({
+        'message': 'Employee deleted successfully',
+        'next_url': next or url_for('main.all_employees')
+    })

@@ -88,4 +88,7 @@ def delete_checkout(checkout_id):
     checkout = checkout_model.get_checkout_by_id(checkout_id)
 
     checkout_model.delete_checkout(checkout_id)
-    return redirect(next or url_for('main.all_checkouts'))
+    return jsonify({
+        'message': 'Checkout deleted successfully',
+        'next_url': next or url_for('main.all_checkouts')
+    })

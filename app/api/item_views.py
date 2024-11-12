@@ -77,7 +77,10 @@ def delete_item(item_id):
         return jsonify({"error": "Item not found"}), 404
 
     item_model.delete_item(item.item_id)
-    return redirect(next or url_for('main.all_items'))
+    return jsonify({
+        'message': 'Item deleted successfully',
+        'next_url': next or url_for('main.all_items')
+    })
 
 
 @api.route('/itemtest/', methods=['GET'])
