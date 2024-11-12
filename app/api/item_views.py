@@ -35,8 +35,17 @@ def create_item():
     brand = data.get('brand') or None
     model = data.get('model') or None
     serial = data.get('serial') or None
+    location_id = data.get('location_id') or None
+    status_id = data.get('status_id') or 1
 
-    item = ItemModel(name, brand, model, serial)
+    item = ItemModel(
+        name=name,
+        brand=brand,
+        model=model,
+        serial=serial,
+        location_id=location_id,
+        status_id=status_id
+    )
     new_item = add_item(item)
 
     return jsonify(new_item.to_dict()), 201

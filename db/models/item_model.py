@@ -4,7 +4,7 @@ from db.connection import get_db
 
 
 class ItemModel:
-    def __init__(self, name, brand=None, model=None, serial=None, item_id=None, location_id=None, status_id=None):
+    def __init__(self, name, brand=None, model=None, serial=None, item_id=None, location_id=None, status_id=1):
         self.item_id = item_id
         self.name = name
         self.brand = brand
@@ -12,7 +12,6 @@ class ItemModel:
         self.serial = serial
         self.location_id = location_id
         self.status_id = status_id
-
 
     @classmethod
     def from_row(cls, row):
@@ -72,13 +71,13 @@ def add_item(item: ItemModel) -> ItemModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO items (name, brand, model, serial) VALUES (%s, %s, %s, %s)',
-            (item.name, item.brand, item.model, item.serial)
+            'INSERT INTO items (name, brand, model, serial, location_id, status_id) VALUES (%s, %s, %s, %s, %s, %s)',
+            (item.name, item.brand, item.model, item.serial, item.location_id, item.status_id)
         )
         item_id = cursor.lastrowid
     db.commit()
     return ItemModel(item_id=item_id, name=item.name, brand=item.brand, model=item.model,
-                     serial=item.serial)
+                     serial=item.serial, location_id=item.location_id, status_id=item.status_id)
 
 
 def update_item(item: ItemModel):
