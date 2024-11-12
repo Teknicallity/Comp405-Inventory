@@ -24,7 +24,7 @@ class ItemModel:
             serial=row[4],
             location_id=row[5],
             status_id=row[6]
-        )
+        ) if row else None
 
     @classmethod
     def list_from_rows(cls, rows) -> list:

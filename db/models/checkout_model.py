@@ -19,7 +19,7 @@ class CheckoutModel:
             employee_id=row[2],
             checkout_date=row[3],
             returned_date=row[4]
-        )
+        ) if row else None
 
     @classmethod
     def list_from_rows(cls, rows) -> list:

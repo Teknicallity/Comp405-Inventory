@@ -21,7 +21,7 @@ class User(UserMixin):
             password_hash=row[2],
             is_admin=row[3] == 1,
             employee_id=row[4]
-        )
+        ) if row else None
 
     @classmethod
     def list_from_rows(cls, rows):

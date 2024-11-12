@@ -27,7 +27,7 @@ class EmployeeModel:
             reports_to_name=row[5] or None,
             username=row[6],
             is_admin=row[7]
-        )
+        ) if row else None
 
     @classmethod
     def list_from_row(cls, rows) -> list:
