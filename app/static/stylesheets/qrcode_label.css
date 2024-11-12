@@ -1,0 +1,16 @@
+
+.printable-label {
+    display: flex;
+    flex-direction: row;
+}
+
+#qrcode, #qrcode>img{
+    display: inline !important;
+}
+
+.label-text {
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
