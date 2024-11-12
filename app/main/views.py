@@ -9,9 +9,3 @@ from db.models.user_model import User
 @main.route('/')
 def index():
     return render_template('home.html')
-
-
-@main.route('/test')
-@debug_only
-def test():
-    return render_template('test.html')

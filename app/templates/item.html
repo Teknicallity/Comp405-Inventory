@@ -82,11 +82,12 @@
     {% if current_user and current_user.is_authenticated %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
     {% endif %}
+{% endblock %}
 
+{% block printable %}
     {% if item and current_user and current_user.is_authenticated %}
         <script src="{{ url_for('static', filename='javascript/qrcode/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='javascript/qrcode/qrcode.js') }}"></script>
-{#        <script src="{{ url_for('static', filename='javascript/print_label.js') }}"></script>#}
 
         <div id="printableLabel">
             <div id="qrcode"></div>
@@ -94,20 +95,17 @@
                 <h1 class="label-name">
                     {{ item.name }}
                 </h1>
-                <h2 class="label-item-location">
-                    {{ item.location_id }}
-                </h2>
+                {% if item.location_id %}
+                    <h2 class="label-item-location">
+                        {{ item.location_id }}
+                    </h2>
+                {% endif %}
             </div>
         </div>
-        <button id="printButton">Print</button>
-        <script type="text/javascript">
-            function printLabel() {
-                let areaToPrint = document.getElementById('printableLabel');
-                areaToPrint.classList.add('print-area');
-                window.print();
-            }
-            document.getElementById('printButton').addEventListener('click', printLabel);
 
+        <button id="printButton" onclick="window.print()">Print</button>
+
+        <script type="text/javascript">
             new QRCode(document.getElementById("qrcode"), {
                 text: "http://jindo.dev.naver.com/collie",
                 width: 128,
