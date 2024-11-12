@@ -83,8 +83,8 @@ def _execute_db_command(command):
 
 
 def _create_database():
-    _execute_db_command(f'CREATE DATABASE IF NOT EXISTS `{current_app.config['MYSQL_DATABASE']}`')
+    _execute_db_command(f'CREATE DATABASE IF NOT EXISTS `{current_app.config["MYSQL_DATABASE"]}`')
 
 
 def _destroy_database():
-    _execute_db_command(f'DROP DATABASE IF EXISTS `{current_app.config['MYSQL_DATABASE']}`')
+    _execute_db_command(f'DROP DATABASE IF EXISTS `{current_app.config["MYSQL_DATABASE"]}`')
