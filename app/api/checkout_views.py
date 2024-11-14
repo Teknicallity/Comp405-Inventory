@@ -76,7 +76,7 @@ def return_checkout(checkout_id):
         return jsonify({'error': 'Only the assigned employee or an admin can return checkout'}), 403
 
     next = request.args.get('next')
-    returned_checkout = checkout_model.return_checkout(checkout_id)
+    returned_checkout = checkout_model.return_checkout_by_id(checkout_id)
     item_model.update_item(ItemModel(item_id=returned_checkout.item_id, status_id=1))
     return redirect(next or url_for('main.checkout_details', checkout_id=checkout_id))
 
