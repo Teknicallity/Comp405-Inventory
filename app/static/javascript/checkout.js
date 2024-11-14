@@ -11,8 +11,7 @@ function returnCheckout(returnUrl) {
         }
     }).then(response => {
         if (response.redirected) {
-            console.log(response)
-            // window.location.href = response.url;
+            window.location.href = response.url;
         } else if (response.status === 404) {
             flashResponseText('Item not found.', 'red').then();
         } else if (response.status === 403 || response.status === 401) {
