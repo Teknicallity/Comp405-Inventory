@@ -46,14 +46,14 @@
     color: #777;
 }
 
-input {
+input, select {
     border: none;
     background-color: #f4f4f4;
     color: #333;
     width: 60%;
 }
 
-input:disabled {
+input:disabled, select:disabled {
     background-color: #f0f0f0;
     color: #666;
 }
@@ -68,25 +68,15 @@ input:disabled {
 .primary-action-container {
     display: flex;
     gap: 10px;
+    flex-direction: column;
 }
 
-.primary-action-container>button {
+.action-row {
+    display: flex;
+    gap: 10px;
+}
+
+.action-row>button {
     flex: 1;
     width: 100%;
 }
-
-/*button {*/
-/*    display: block;*/
-/*    width: 100%;*/
-/*    padding: 10px;*/
-/*    border: none;*/
-/*    border-radius: 4px;*/
-/*    background-color: #4CAF50;*/
-/*    color: white;*/
-/*    font-size: 16px;*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*button:hover {*/
-/*    background-color: #45a049;*/
-/*}*/

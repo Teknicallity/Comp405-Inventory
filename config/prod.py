@@ -6,11 +6,18 @@ from .base import BaseConfig
 
 class ProdConfig(BaseConfig):
     TESTING = False
+
+    secret_key_path = os.path.join(BaseConfig.BASEDIR, 'data', 'secretkey.txt')
     try:
-        with open(os.path.join(BaseConfig.BASEDIR, 'secretkey.txt')) as f:
+        with open(secret_key_path) as f:
             SECRET_KEY = f.read().strip()
     except FileNotFoundError:
         SECRET_KEY = secrets.token_hex()
+        try:
+            with open(secret_key_path, 'w', encoding='utf-8') as f:
+                f.write(SECRET_KEY)
+        except (OSError, IOError) as e:
+            print(f"Error writing to {secret_key_path}: {e}")
 
     MYSQL_HOST = os.environ.get('MYSQL_HOST', 'localhost')
     MYSQL_PORT = int(os.environ.get('MYSQL_PORT', 3306))

@@ -1,6 +1,6 @@
 function toggleEdit(url) {
     const form = document.getElementById('objectForm');
-    const inputs = form.querySelectorAll('input');
+    const inputs = form.querySelectorAll('input, select');
     const editButton = document.getElementById('editButton');
     const cancelButton = document.getElementById('cancelButton');
     const csrfToken = document.getElementById('csrf_token').value;
@@ -76,7 +76,7 @@ function toggleEdit(url) {
 
 function cancelEdit(getObjectFromIdUrl) {
     const form = document.getElementById('objectForm');
-    const inputs = form.querySelectorAll('input');
+    const inputs = form.querySelectorAll('input, select');
     const editButton = document.getElementById('editButton');
     const cancelButton = document.getElementById('cancelButton');
 
