@@ -2,7 +2,7 @@ from flask_login import login_required, current_user
 from flask import render_template, abort
 
 from app.main import main
-from db.models.employee_model import get_all_employees, get_employee_by_id
+from db.models.employee_model import get_all_employees, get_employee_by_id, EmployeeModel
 from db.models.user_model import User
 
 
@@ -25,7 +25,8 @@ def employee_details(employee_id):
     employee = get_employee_by_id(employee_id)
     if employee is None:
         return abort(404)
-    return render_template('employee.html', employee=employee)
+    possible_managers = get_all_employees()
+    return render_template('employee.html', employee=employee, reports_to_choices=possible_managers)
 
 
 @main.route('/employees/create/')
@@ -34,4 +35,5 @@ def create_employee():
     user: User = current_user
     if not user.is_admin:
         return abort(403)
-    return render_template('employee.html')
+    possible_managers = get_all_employees()
+    return render_template('employee.html', reports_to_choices=possible_managers)
