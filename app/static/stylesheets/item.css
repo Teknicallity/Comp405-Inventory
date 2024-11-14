@@ -68,9 +68,15 @@ input:disabled, select:disabled {
 .primary-action-container {
     display: flex;
     gap: 10px;
+    flex-direction: column;
 }
 
-.primary-action-container>button {
+.action-row {
+    display: flex;
+    gap: 10px;
+}
+
+.action-row>button {
     flex: 1;
     width: 100%;
 }

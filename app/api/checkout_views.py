@@ -66,7 +66,7 @@ def update_checkout(checkout_id):
 
 @api.route('/checkouts/<int:checkout_id>/return', methods=['POST'])
 @login_required
-def return_checkout(checkout_id):
+def return_checkout_by_id(checkout_id):
     user: User = current_user
     checkout = checkout_model.get_checkout_by_id(checkout_id)
     if not checkout:
