@@ -2,11 +2,12 @@ from db.connection import get_db
 
 
 class DocumentationModel:
-    def __init__(self, documentation_id=None, url=None, description=None, item_id=None):
+    def __init__(self, documentation_id=None, url=None, description=None, item_id=None, item_name=None):
         self.documentation_id = documentation_id
         self.url = url
         self.description = description
         self.item_id = item_id
+        self.item_name = item_name
 
     @classmethod
     def from_row(cls, row):
@@ -14,7 +15,8 @@ class DocumentationModel:
             documentation_id=row[0],
             url=row[1],
             description=row[2],
-            item_id=row[3]
+            item_id=row[3],
+            item_name=row[4],
         )
 
     @classmethod
@@ -26,7 +28,8 @@ class DocumentationModel:
             'checkout_id': self.documentation_id,
             'url': self.url,
             'description': self.description,
-            'item_id': self.item_id
+            'item_id': self.item_id,
+            'item_name': self.item_name,
         }
 
 
@@ -34,8 +37,9 @@ def get_all_documentation():
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''
-            SELECT d.documentation_id, d.url, d.description, d.item_id
+            SELECT d.documentation_id, d.url, d.description, d.item_id, i.name
             FROM documentation d
+            LEFT JOIN items i ON d.item_id = i.item_id
         ''')
         return DocumentationModel.list_from_rows(cursor.fetchall())
 
@@ -62,8 +66,9 @@ def get_documentation_by_id(document_id: int) -> DocumentationModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''
-            SELECT d.documentation_id, d.url, d.description, d.item_id
+            SELECT d.documentation_id, d.url, d.description, d.item_id, i.name
             FROM documentation d
+            LEFT JOIN items i ON d.item_id = i.item_id
             WHERE d.item_id = ?
         ''', (document_id,))
         row = cursor.fetchone()
