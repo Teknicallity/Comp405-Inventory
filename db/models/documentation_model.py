@@ -34,7 +34,7 @@ def get_all_documentation():
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''
-            SELECT d.documentation_id, d.description, d.item_id, d.item_id
+            SELECT d.documentation_id, d.url, d.description, d.item_id
             FROM documentation d
         ''')
         return DocumentationModel.list_from_rows(cursor.fetchall())
@@ -51,7 +51,7 @@ def add_documentation(url, description, item_id):
     db.commit()
 
     return DocumentationModel(
-        checkout_id=documentation_id,
+        documentation_id=documentation_id,
         url=url,
         description=description,
         item_id=item_id
@@ -62,7 +62,7 @@ def get_documentation_by_id(document_id: int) -> DocumentationModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''
-            SELECT d.documentation_id, d.description, d.item_id
+            SELECT d.documentation_id, d.url, d.description, d.item_id
             FROM documentation d
             WHERE d.item_id = ?
         ''', (document_id,))
