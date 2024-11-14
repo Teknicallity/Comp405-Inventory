@@ -49,15 +49,26 @@
                            {% if item %}disabled{% endif %}>
                 </div>
                 <div class="detail">
-                    <label for="location_id" class="label">Location:</label>
-                    <input type="text" id="location_id" name="location_id"
-                           value="{{ (item.location_id if item) or '' }}"
-                           {% if item %}disabled{% endif %}>
+                    <label for="location_choices" class="label">Location:</label>
+                    <select name="location_id" id="location_choices" {% if item %}disabled{% endif %}>
+                        {% for location in locations %}
+                            <option value="{{ location.location_id }}"
+                                    {% if item and item.location_id == location.location_id %}selected{% endif %}>
+                                {{ location.location_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="detail">
-                    <label for="status_id" class="label">Status:</label>
-                    <input type="text" id="status_id" name="status_id" value="{{ (item.status_id if item) or '' }}"
-                           {% if item %}disabled{% endif %}>
+                    <label for="status_choices" class="label">Status:</label>
+                    <select name="status_id" id="status_choices" {% if item %}disabled{% endif %}>
+                        {% for status in statuses %}
+                            <option value="{{ status.status_id }}"
+                                    {% if item and item.status_id == status.status_id %}selected{% endif %}>
+                                {{ status.status_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <input type="hidden" id="objectId" name="item_id" value="{{ item.item_id if item }}" disabled readonly>
@@ -95,9 +106,9 @@
                 <h1 class="label-name">
                     {{ item.name }}
                 </h1>
-                {% if item.location_id %}
+                {% if item.location_name %}
                     <h2 class="label-item-location">
-                        {{ item.location_id }}
+                        {{ item.location_name }}
                     </h2>
                 {% endif %}
             </div>
