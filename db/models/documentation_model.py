@@ -40,21 +40,21 @@ def get_all_documentation():
         return DocumentationModel.list_from_rows(cursor.fetchall())
 
 
-def add_documentation(url, description, item_id):
+def add_documentation(documentation: DocumentationModel):
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute(
             'INSERT INTO documentation (url, description, item_id) VALUES (?, ?, ?)',
-            (url, description, item_id)
+            (documentation.url, documentation.description, documentation.item_id)
         )
         documentation_id = cursor.lastrowid
     db.commit()
 
     return DocumentationModel(
         documentation_id=documentation_id,
-        url=url,
-        description=description,
-        item_id=item_id
+        url=documentation.url,
+        description=documentation.description,
+        item_id=documentation.item_id
     )
 
 
