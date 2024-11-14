@@ -4,8 +4,8 @@ from db.connection import get_db
 
 
 class ItemModel:
-    def __init__(self, name, brand=None, model=None, serial=None, item_id=None, location_id=None, location_name=None,
-                 status_id=1, status_name=None):
+    def __init__(self, name=None, brand=None, model=None, serial=None, item_id=None, location_id=None,
+                 location_name=None, status_id=1, status_name=None):
         self.item_id = item_id
         self.name = name
         self.brand = brand
