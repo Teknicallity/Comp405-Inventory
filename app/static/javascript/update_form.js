@@ -56,7 +56,9 @@ function toggleEdit(url) {
                         });
                     } else {
                         // Create object
-                        inputs.forEach(input => input.value = '');
+                        inputs.forEach(input => {
+                            if (input.id !== 'csrf_token') input.value = ''
+                        });
                         flashResponseText('Created successfully.', 'darkgreen').then();
                     }
 

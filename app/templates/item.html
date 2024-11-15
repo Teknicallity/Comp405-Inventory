@@ -3,12 +3,14 @@
 
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/item.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/large_table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/qrcode_label.css') }}">
 {% endblock %}
 
 
 {% block main %}
-    <div class="item-card" style="margin: auto">
+    <div class="page-container">
+    <div class="item-card">
         <div class="card-header-container">
             <h1 id="objectName">{% if item %}{{ item.name }}{% else %}Create Item{% endif %}</h1>
             {% if item and current_user and current_user.is_admin %}
@@ -112,6 +114,43 @@
                 </div>
             </div>
         </form>
+    </div>
+    {% if documentation %}
+    <div class="list-table">
+        <h2>Documentation List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>URL</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in documentation %}
+                <tr>
+                    <td>{{ doc.documentation_id }}</td>
+                    <td>{{ doc.description }}</td>
+                    <td><a href="{{ doc.url }}" target="_blank">View</a></td>
+                    <td>
+                        <button type="button" class="btn btn-success btn-sm"
+                                onclick="window.location.href='{{ url_for('main.documentation_details', documentation_id=doc.documentation_id) }}'">
+                            Details
+                        </button>
+{#                        {% if current_user and current_user.is_admin %}#}
+{#                        <button type="button" class="btn btn-danger btn-sm"#}
+{#                                onclick="deleteObject('{{ url_for('api.delete_documentation', documentation_id=doc.documentation_id) }}')">#}
+{#                            Delete#}
+{#                        </button>#}
+{#                        {% endif %}#}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
     </div>
     {% if current_user and current_user.is_admin %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
