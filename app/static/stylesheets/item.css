@@ -46,6 +46,13 @@
     color: #777;
 }
 
+.not-editable {
+    cursor: default;
+    width: 60%;
+    background-color: #ececec;
+    color: #666;
+}
+
 input, select {
     border: none;
     background-color: #f4f4f4;
@@ -54,7 +61,7 @@ input, select {
 }
 
 input:disabled, select:disabled {
-    background-color: #f0f0f0;
+    background-color: #ececec;
     color: #666;
 }
 
