@@ -28,4 +28,6 @@ if str_to_bool "$RESET_ON_RESTART"; then
   flask --app inventory-system init-db -r
 fi
 
+flask --app inventory-system ensure-admin
+
 exec uwsgi --http :"$SERVER_PORT" --ini uwsgi.ini

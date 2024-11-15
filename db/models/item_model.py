@@ -32,10 +32,7 @@ class ItemModel:
 
     @classmethod
     def list_from_rows(cls, rows) -> list:
-        item_list = []
-        for item in rows:
-            item_list.append(ItemModel.from_row(item))
-        return item_list
+        return [cls.from_row(row) for row in rows]
 
     def to_dict(self):
         # Convert the object attributes to a dictionary
