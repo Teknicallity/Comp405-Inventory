@@ -20,7 +20,7 @@ def all_employees():
 @login_required
 def employee_details(employee_id):
     user: User = current_user
-    if not user.is_admin:
+    if not (user.is_admin or user.employee_id == employee_id):
         return abort(403)
     employee = get_employee_by_id(employee_id)
     if employee is None:
