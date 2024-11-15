@@ -58,7 +58,7 @@ def get_employee(employee_id):
 @login_required
 def update_employee(employee_id):
     user: User = current_user
-    if not user.is_admin:
+    if not (user.is_admin or user.employee_id == employee_id):
         return abort(401)
 
     employee = employee_model.get_employee_by_id(employee_id)
@@ -66,15 +66,22 @@ def update_employee(employee_id):
         return jsonify({'message': 'Employee not found'}), 404
 
     data = request.get_json()
-    fields_to_update = {
-        'first_name': data.get('first_name'),
-        'last_name': data.get('last_name'),
-        'title': data.get('title'),
-        'reports_to': data.get('reports_to'),
-        'username': data.get('username'),
-        'password': data.get('password'),
-        'is_admin': True if data.get('is_admin') is True else False
-    }
+    fields_to_update = {}
+    if user.is_admin:
+        fields_to_update = {
+            'first_name': data.get('first_name'),
+            'last_name': data.get('last_name'),
+            'title': data.get('title'),
+            'reports_to': data.get('reports_to'),
+            'username': data.get('username'),
+            'password': data.get('password'),
+            'is_admin': True if data.get('is_admin') is True else False
+        }
+    elif user.employee_id == employee_id:
+        fields_to_update = {
+            'username': data.get('username'),
+            'password': data.get('password'),
+        }
 
     for field, value in fields_to_update.items():
         if value not in (None, ""):
