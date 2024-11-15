@@ -10,7 +10,7 @@ from db.models import documentation_model
 def all_documentation():
     # user: User = current_user
     documentation = documentation_model.get_all_documentation()
-    return render_template('documenation_list.html', documentation=documentation)
+    return render_template('documentation_list.html', documentation=documentation)
 
 
 @main.route('/documentation/<int:document_id>/')
@@ -19,10 +19,10 @@ def documentation_details(document_id):
     document = documentation_model.get_documentation_by_id(document_id)
     if document is None:
         abort(404)
-    return render_template('documenation.html', document=document)
+    return render_template('documentation.html', document=document)
 
 
 @main.route('/documentation/create/')
 @login_required
 def create_documentation():
-    return render_template('documenation.html')
+    return render_template('documentation.html')
