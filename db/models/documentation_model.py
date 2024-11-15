@@ -48,7 +48,7 @@ def add_documentation(documentation: DocumentationModel):
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO documentation (url, description, item_id) VALUES (?, ?, ?)',
+            'INSERT INTO documentation (url, description, item_id) VALUES (%s, %s, %s)',
             (documentation.url, documentation.description, documentation.item_id)
         )
         documentation_id = cursor.lastrowid
@@ -69,7 +69,7 @@ def get_documentation_by_id(document_id: int) -> DocumentationModel:
             SELECT d.documentation_id, d.url, d.description, d.item_id, i.name
             FROM documentation d
             LEFT JOIN items i ON d.item_id = i.item_id
-            WHERE d.item_id = ?
+            WHERE d.documentation_id = %s
         ''', (document_id,))
         row = cursor.fetchone()
 
@@ -84,15 +84,15 @@ def update_documentation(documentation: DocumentationModel):
         params = []
 
         if documentation.url is not None:
-            updates.append('url = %s')
+            updates.append(' url = %s')
             params.append(documentation.url)
 
         if documentation.description is not None:
-            updates.append('description = %s')
+            updates.append(' description = %s')
             params.append(documentation.description)
 
         if documentation.item_id is not None:
-            updates.append('item_id = %s')
+            updates.append(' item_id = %s')
             params.append(documentation.item_id)
 
         if updates:

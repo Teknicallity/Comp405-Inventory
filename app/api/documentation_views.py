@@ -34,7 +34,7 @@ def create_documentation():
     new_documentation = documentation_model.add_documentation(documentation)
     return jsonify(new_documentation.to_dict()), 201
 
-@api.route('/documentation/<int:documentation_id/', methods=['GET'])
+@api.route('/documentation/<int:documentation_id>/', methods=['GET'])
 def get_documentation_by_id(documentation_id):
     documentation = documentation_model.get_documentation_by_id(documentation_id)
     if not documentation:
