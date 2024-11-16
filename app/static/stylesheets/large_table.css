@@ -1,19 +1,7 @@
-.page-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-left: 20px;
-    margin-right: 20px;
-}
 
 .list-table {
     flex: 1;
     max-width: 600px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
 }
 
 .table-label {
