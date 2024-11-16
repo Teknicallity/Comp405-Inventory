@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main %}
-    <div class="item-card" style="margin: auto">
+    <div class="item-card page-card" style="margin: auto">
         <div class="card-header-container">
             <h1 id="objectName">{% if document %}{{ document.description }}{% else %}Create Document{% endif %}</h1>
             {% if document and current_user and current_user.is_admin %}
@@ -72,7 +72,7 @@
                 </div>
                 <div class="action-row">
                     {% if document %}
-                        <button type="button" id="printButton" class="btn btn-info shadow-none"
+                        <button type="button" id="printButton" class="btn btn-info shadow-none" style="color: white;"
                                 onclick="window.print()">
                             Print Label
                         </button>

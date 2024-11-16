@@ -7,7 +7,7 @@
 
 
 {% block main %}
-    <div class="item-card" style="margin: auto">
+    <div class="item-card page-card" style="margin: auto">
         <div class="card-header-container">
             <h1 id="objectName">{% if employee %}{{ employee.first_name }}{% else %}Create Employee{% endif %}</h1>
             {% if employee and current_user and current_user.is_admin %}

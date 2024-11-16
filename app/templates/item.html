@@ -10,7 +10,7 @@
 
 {% block main %}
     <div class="page-container">
-    <div class="item-card">
+    <div class="item-card page-card">
         <div class="card-header-container">
             <h1 id="objectName">{% if item %}{{ item.name }}{% else %}Create Item{% endif %}</h1>
             {% if item and current_user and current_user.is_admin %}
@@ -93,7 +93,7 @@
                 </div>
                 <div class="action-row">
                     {% if item %}
-                        <button type="button" id="printButton" class="btn btn-info shadow-none"
+                        <button type="button" id="printButton" class="btn btn-info shadow-none" style="color: white;"
                                 onclick="window.print()">
                             Print Label
                         </button>
@@ -116,7 +116,7 @@
         </form>
     </div>
     {% if documentation %}
-    <div class="list-table">
+    <div class="list-table page-card">
         <h2>Documentation List</h2>
         <table>
             <thead>

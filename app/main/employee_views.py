@@ -19,6 +19,8 @@ def all_employees():
 @main.route('/employees/<int:employee_id>')
 @login_required
 def employee_details(employee_id):
+    if employee_id == 0:
+        return 'user does not have employee id'
     user: User = current_user
     if not (user.is_admin or user.employee_id == employee_id):
         return abort(403)

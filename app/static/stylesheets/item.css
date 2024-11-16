@@ -1,9 +1,5 @@
 /* Existing CSS */
 .item-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     width: 90%;
     max-width: 400px;
 }
@@ -40,6 +36,7 @@
 .label {
     font-weight: bold;
     color: #555;
+    padding: 5px;
 }
 
 .value {
@@ -51,6 +48,8 @@
     width: 60%;
     background-color: #ececec;
     color: #666;
+    padding: 5px;
+    border-radius: 4px;
 }
 
 input, select {
@@ -58,6 +57,8 @@ input, select {
     background-color: #f4f4f4;
     color: #333;
     width: 60%;
+    padding: 5px;
+    border-radius: 4px;
 }
 
 input:disabled, select:disabled {
