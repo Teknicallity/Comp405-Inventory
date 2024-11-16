@@ -59,6 +59,7 @@
                 </div>
                 {% elif employee %}
                     <div class="detail">
+                        <button id="name" value="{{ employee.first_name }}" style="display: none;"></button>
                         <label class="label">First Name:</label>
                         <p class="not-editable">{{ employee.first_name }}</p>
                     </div>
