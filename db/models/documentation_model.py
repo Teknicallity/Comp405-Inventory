@@ -76,6 +76,20 @@ def get_documentation_by_id(document_id: int) -> DocumentationModel:
         return DocumentationModel.from_row(row) if row else None
 
 
+def get_documentation_for_item_id(item_id: int) -> list[DocumentationModel]:
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute('''
+            SELECT d.documentation_id, d.url, d.description, d.item_id, i.name
+            FROM documentation d
+            LEFT JOIN items i ON d.item_id = i.item_id
+            Where d.item_id = %s
+        ''', (item_id,))
+        rows = cursor.fetchall()
+
+        return DocumentationModel.list_from_rows(rows) if len(rows) > 0 else None
+
+
 def update_documentation(documentation: DocumentationModel):
     db = get_db()
     with db.cursor() as cursor:

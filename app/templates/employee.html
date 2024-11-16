@@ -10,7 +10,7 @@
     <div class="item-card" style="margin: auto">
         <div class="card-header-container">
             <h1 id="objectName">{% if employee %}{{ employee.first_name }}{% else %}Create Employee{% endif %}</h1>
-            {% if employee %}
+            {% if employee and current_user and current_user.is_admin %}
                 <div class="delete-button-container">
                     <button type="button" id="deleteButton" class="btn btn-danger shadow-none"
                             onclick="deleteObject('{{ url_for('api.delete_employee', employee_id=employee.employee_id) }}')">
@@ -27,6 +27,7 @@
         <form id="objectForm">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
             <div class="item-details">
+                {% if current_user and current_user.is_admin %}
                 <div class="detail">
                     <label for="name" class="label">First Name:</label>
                     <input type="text" id="name" name="first_name" value="{{ (employee.first_name if employee) or '' }}"
@@ -56,6 +57,25 @@
                         {% endfor %}
                     </select>
                 </div>
+                {% elif employee %}
+                    <div class="detail">
+                        <button id="name" value="{{ employee.first_name }}" style="display: none;"></button>
+                        <label class="label">First Name:</label>
+                        <p class="not-editable">{{ employee.first_name }}</p>
+                    </div>
+                    <div class="detail">
+                        <label class="label">Last Name:</label>
+                        <p class="not-editable">{{ employee.last_name }}</p>
+                    </div>
+                    <div class="detail">
+                        <label class="label">Title:</label>
+                        <p class="not-editable">{{ employee.title }}</p>
+                    </div>
+                    <div class="detail">
+                        <label class="label">Reports to:</label>
+                        <p class="not-editable">{{ employee.reports_to_name or '' }}</p>
+                    </div>
+                {% endif %}
                 <div class="detail">
                     <label for="username" class="label">Username:</label>
                     <input type="text" id="username" name="username"
@@ -96,7 +116,7 @@
             </div>
         </form>
     </div>
-    {% if current_user.is_authenticated and current_user.is_admin %}
+    {% if current_user.is_authenticated %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
     {% endif %}
 {% endblock %}

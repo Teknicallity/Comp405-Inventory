@@ -6,24 +6,32 @@
 {% endblock %}
 
 {% block main %}
-    <div class="table-container" style="max-width: 1500px; margin: auto">
-        <table>
-            <thead>
-            <tr>
-                <th>URL</th>
-                <th>Description</th>
-                <th>Item Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for document in documentation %}
-                <tr onclick="window.location.href='{{ url_for('main.documentation_details', documentation_id=document.documentation_id) }}';">
-                    <td>{{ document.url }}</td>
-                    <td>{{ document.description }}</td>
-                    <td>{{ document.item_name }}</td>
+    <div class="page-container">
+        <div class="list-table highlightable" style="max-width: 1000px;">
+            <div class="table-label">
+                <h3>Documentation</h3>
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    <a href="{{ url_for('main.create_documentation') }}" class="btn btn-success" role="button">Create</a>
+                {% endif %}
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Description</th>
+                    <th>Item Name</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for document in documentation %}
+                    <tr onclick="window.location.href='{{ url_for('main.documentation_details', documentation_id=document.documentation_id) }}';">
+                        <td>{{ document.url }}</td>
+                        <td>{{ document.description }}</td>
+                        <td>{{ document.item_name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
