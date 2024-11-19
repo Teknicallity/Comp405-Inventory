@@ -38,7 +38,7 @@ def init_db_command(reset):
 @click.command('create-admin')
 @click.option('--username', '-u', prompt='Admin Username', help='Admin Username')
 def create_admin_command(username):
-    """Creates a user with admin privileges."""
+    """Interactively create a user with admin privileges."""
     password = click.prompt('Password', hide_input=True, confirmation_prompt=True)
     add_user(
         username,
@@ -75,7 +75,7 @@ def ensure_admin():
 @click.option('--admin', '-a', is_flag=True, default=False, help='User is admin?')
 def create_employee_command(file, first, last, title, username, admin):
     """
-    Creates an employee interactively or from CSV file.
+    Creates an employee interactively or from CSV file (-F).
     """
     if file:
         # Bulk creation from CSV
