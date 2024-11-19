@@ -1,8 +1,9 @@
 from flask import jsonify, request, redirect, url_for
 from flask_login import login_required, current_user
 
+from db.models.item_model import ItemModel
 from . import api
-from db.models import checkout_model
+from db.models import checkout_model, item_model
 from db.models.checkout_model import CheckoutModel
 from db.models.user_model import User
 
@@ -25,6 +26,7 @@ def create_checkout():
         employee_id = e_id if e_id not in (None, "") else user.employee_id
     else:
         employee_id = user.employee_id
+    item_model.update_item(ItemModel(item_id=item_id, status_id=2))
     checkout = CheckoutModel(item_id=item_id, employee_id=employee_id)
     new_checkout = checkout_model.create_checkout(checkout)
 
@@ -64,7 +66,7 @@ def update_checkout(checkout_id):
 
 @api.route('/checkouts/<int:checkout_id>/return', methods=['POST'])
 @login_required
-def return_checkout(checkout_id):
+def return_checkout_by_id(checkout_id):
     user: User = current_user
     checkout = checkout_model.get_checkout_by_id(checkout_id)
     if not checkout:
@@ -74,7 +76,8 @@ def return_checkout(checkout_id):
         return jsonify({'error': 'Only the assigned employee or an admin can return checkout'}), 403
 
     next = request.args.get('next')
-    returned_checkout = checkout_model.return_checkout(checkout_id)
+    returned_checkout = checkout_model.return_checkout_by_id(checkout_id)
+    item_model.update_item(ItemModel(item_id=returned_checkout.item_id, status_id=1))
     return redirect(next or url_for('main.checkout_details', checkout_id=checkout_id))
 
 

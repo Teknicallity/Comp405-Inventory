@@ -27,7 +27,7 @@ def init_db_command(reset):
 
     try:
         _apply_db_schema()
-    except OperationalError:
+    except OperationalError as e:
         click.echo(f'Error applying schema: {e}', err=True)
         click.echo('Pass -r or --reset flag to reset database.')
     else:

@@ -7,10 +7,10 @@
 
 
 {% block main %}
-    <div class="item-card" style="margin: auto">
+    <div class="item-card page-card" style="margin: auto">
         <div class="card-header-container">
-            <h1 id="objectName">{% if employee %}{{ employee.first_name }}{% else %}Create Item{% endif %}</h1>
-            {% if employee %}
+            <h1 id="objectName">{% if employee %}{{ employee.first_name }}{% else %}Create Employee{% endif %}</h1>
+            {% if employee and current_user and current_user.is_admin %}
                 <div class="delete-button-container">
                     <button type="button" id="deleteButton" class="btn btn-danger shadow-none"
                             onclick="deleteObject('{{ url_for('api.delete_employee', employee_id=employee.employee_id) }}')">
@@ -27,41 +27,69 @@
         <form id="objectForm">
             <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
             <div class="item-details">
+                {% if current_user and current_user.is_admin %}
                 <div class="detail">
-                    <label for="name" class="label">First Name</label>
+                    <label for="name" class="label">First Name:</label>
                     <input type="text" id="name" name="first_name" value="{{ (employee.first_name if employee) or '' }}"
                            {% if employee %}disabled{% endif %}>
                 </div>
                 <div class="detail">
-                    <label for="last_name" class="label">Last Name</label>
+                    <label for="last_name" class="label">Last Name:</label>
                     <input type="text" id="last_name" name="last_name"
                            value="{{ (employee.last_name if employee) or '' }}" {% if employee %}disabled{% endif %}>
                 </div>
                 <div class="detail">
-                    <label for="title" class="label">Title</label>
+                    <label for="title" class="label">Title:</label>
                     <input type="text" id="title" name="title" value="{{ (employee.title if employee) or '' }}"
                            {% if employee %}disabled{% endif %}>
                 </div>
                 <div class="detail">
-                    <label for="reports_to" class="label">Reports to Id</label>
-                    <input type="text" id="reports_to" name="reports_to"
-                           value="{{ (employee.reports_to if employee) or '' }}"
-                           {% if employee %}disabled{% endif %}>
+                    <label for="reports_to_choices" class="label">Reports to:</label>
+                    <select name="reports_to" id="reports_to_choices" {% if employee %}disabled{% endif %}>
+                        <option value=""> </option>
+                        {% for reports_to_choice in reports_to_choices %}
+                            {% if (employee and employee.employee_id != reports_to_choice.employee_id) or not employee%}
+                            <option value="{{ reports_to_choice.employee_id }}"
+                                    {% if employee and employee.reports_to == reports_to_choice.employee_id %}selected{% endif %}>
+                                {{ reports_to_choice.first_name }} {{ reports_to_choice.last_name }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
                 </div>
+                {% elif employee %}
+                    <div class="detail">
+                        <button id="name" value="{{ employee.first_name }}" style="display: none;"></button>
+                        <label class="label">First Name:</label>
+                        <p class="not-editable">{{ employee.first_name }}</p>
+                    </div>
+                    <div class="detail">
+                        <label class="label">Last Name:</label>
+                        <p class="not-editable">{{ employee.last_name }}</p>
+                    </div>
+                    <div class="detail">
+                        <label class="label">Title:</label>
+                        <p class="not-editable">{{ employee.title }}</p>
+                    </div>
+                    <div class="detail">
+                        <label class="label">Reports to:</label>
+                        <p class="not-editable">{{ employee.reports_to_name or '' }}</p>
+                    </div>
+                {% endif %}
                 <div class="detail">
-                    <label for="username" class="label">Username</label>
+                    <label for="username" class="label">Username:</label>
                     <input type="text" id="username" name="username"
                            value="{{ (employee.username if employee) or '' }}"
                            {% if employee %}disabled{% endif %}>
                 </div>
                 <div class="detail">
-                    <label for="password" class="label">Password</label>
+                    <label for="password" class="label">Password:</label>
                     <input type="text" id="password" name="password" value=""
                            {% if employee %}disabled{% endif %}>
                 </div>
                 {% if current_user.is_authenticated and current_user.is_admin %}
                     <div class="detail">
-                        <label for="is_admin" class="label">Admin</label>
+                        <label for="is_admin" class="label">Admin:</label>
                         <input type="checkbox" id="is_admin" name="is_admin"
                                {% if employee and employee.is_admin %}checked{% endif %}
                                {% if employee %}disabled{% endif %}>
@@ -88,7 +116,7 @@
             </div>
         </form>
     </div>
-    {% if current_user.is_authenticated and current_user.is_admin %}
+    {% if current_user.is_authenticated %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
     {% endif %}
 {% endblock %}

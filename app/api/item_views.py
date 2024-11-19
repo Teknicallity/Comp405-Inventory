@@ -1,6 +1,7 @@
 from flask import jsonify, request, render_template, url_for, redirect
 from flask_login import login_required
 
+from db.models.checkout_model import return_checkout_by_item_id
 from db.models.item_model import ItemModel, add_item
 from . import api
 from db.models import item_model
@@ -75,6 +76,24 @@ def update_item(item_id):
     item_model.update_item(item)
 
     return jsonify(item.to_dict()), 200
+
+
+@api.route('/items/<int:item_id>/return', methods=['POST'])
+@login_required
+def return_item_by_id(item_id):
+    item: ItemModel = item_model.get_item_by_id(item_id)
+    if not item:
+        return jsonify({"error": f"Item with ID {item_id} not found"}), 404
+    if item.status_id == 1:
+        return jsonify({"error": f"Item with ID {item_id} already returned"}), 400
+    if item.status_id != 2:
+        return jsonify({"error": f"Item with ID {item_id} cannot be returned"}), 400
+
+    next = request.args.get('next')
+
+    return_checkout_by_item_id(item.item_id)
+    updated_item = item_model.update_item(ItemModel(item_id=item.item_id, status_id=1))
+    return redirect(next or url_for('main.item_details', item_id=item_id))
 
 
 @api.route('/items/<int:item_id>', methods=['DELETE'])

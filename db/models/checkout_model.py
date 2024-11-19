@@ -90,12 +90,22 @@ def update_checkout(checkout: CheckoutModel):
             db.commit()
 
 
-def return_checkout(checkout_id: int) -> CheckoutModel:
+def return_checkout_by_id(checkout_id: int) -> CheckoutModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''UPDATE checkouts SET returned_date = NOW() WHERE checkout_id = %s''', (checkout_id,))
     db.commit()
     return get_checkout_by_id(checkout_id)
+
+
+def return_checkout_by_item_id(item_id: int):
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute('''
+            UPDATE checkouts 
+            SET returned_date = NOW()
+            WHERE checkout_id = %s and returned_date IS NULL''', (item_id,))
+    db.commit()
 
 
 def delete_checkout(checkout_id: int):

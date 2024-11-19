@@ -60,5 +60,29 @@ CREATE TABLE documentation (
 ) ENGINE=InnoDB;
 
 INSERT INTO statuses (name) VALUES ('Available'), ('Checked Out'), ('Missing'), ('Damaged');
+INSERT INTO locations (name)
+    VALUES ('Hand-tool Pegboard'), ('Drill Rack'), ('Charging Station'), ('Paint Station'), ('Electronics Bench'),
+           ('Safety Cabinet');
 
-INSERT INTO items (name, serial) VALUES ('test tool', 'serial5612');
+INSERT INTO items (name, serial, location_id) VALUES
+    ('Hammer', 'HT001', 1),
+    ('Screwdriver Set', 'HT002', 1),
+    ('Measuring Tape', 'HT003', 1),
+
+    ('Cordless Drill', 'DRL003', 2),
+    ('Skill Saw', 'PT005', 2),
+    ('Nail Gun', 'DRL007', 2),
+
+    ('Battery Pack', 'CHG001', 3),
+
+    ('Sander', 'PT004', 4),
+    ('Paint Brushes Set', 'PT006', 4),
+    ('Paint Cans', 'PT007', 4),
+
+    ('Multimeter', 'ELE005', 5),
+    ('Wire Cutter', 'ELE006', 5),
+    ('Soldering Iron', 'ELE007', 5),
+
+    ('Safety Goggles', 'SFT001', 6),
+    ('Respirator Mask', 'SFT002', 6),
+    ('First Aid Kit', 'SFT003', 6);

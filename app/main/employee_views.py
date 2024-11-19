@@ -13,19 +13,22 @@ def all_employees():
     if not user.is_admin:
         return abort(403)
     employees = get_all_employees()
-    return render_template('home.html', employees=employees)
+    return render_template('employee_list.html', employees=employees)
 
 
 @main.route('/employees/<int:employee_id>')
 @login_required
 def employee_details(employee_id):
+    if employee_id == 0:
+        return 'user does not have employee id'
     user: User = current_user
-    if not user.is_admin:
+    if not (user.is_admin or user.employee_id == employee_id):
         return abort(403)
     employee = get_employee_by_id(employee_id)
     if employee is None:
         return abort(404)
-    return render_template('employee.html', employee=employee)
+    possible_managers = get_all_employees()
+    return render_template('employee.html', employee=employee, reports_to_choices=possible_managers)
 
 
 @main.route('/employees/create/')
@@ -34,7 +37,8 @@ def create_employee():
     user: User = current_user
     if not user.is_admin:
         return abort(403)
-    return render_template('employee.html')
+    possible_managers = get_all_employees()
+    return render_template('employee.html', reports_to_choices=possible_managers)
 
 
 @main.route('/employees/filter/')
@@ -43,12 +47,12 @@ def filter_employees():
     user: User = current_user
     if not user.is_admin:
         return abort(403)
-    
+
     filter_type = request.args.get('filter', 'reports')
-    
+
     if filter_type == 'leads':
         employees = get_employees_by_reports_to(None)
     else:
         employees = get_employees_by_reports_to(not None)
-    
+
     return render_template('home.html', employees=employees)

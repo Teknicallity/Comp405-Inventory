@@ -12,7 +12,7 @@ from db.models.user_model import User
 def all_checkouts():
     # user: User = current_user
     checkouts = checkout_model.get_all_checkouts()
-    return render_template('home.html', checkouts=checkouts)
+    return render_template('checkout_list.html', checkouts=checkouts)
 
 
 @main.route('/checkouts/<int:checkout_id>/')

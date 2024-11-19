@@ -1,9 +1,5 @@
 /* Existing CSS */
 .item-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     width: 90%;
     max-width: 400px;
 }
@@ -40,21 +36,33 @@
 .label {
     font-weight: bold;
     color: #555;
+    padding: 5px;
 }
 
 .value {
     color: #777;
 }
 
-input {
+.not-editable {
+    cursor: default;
+    width: 60%;
+    background-color: #ececec;
+    color: #666;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+input, select {
     border: none;
     background-color: #f4f4f4;
     color: #333;
     width: 60%;
+    padding: 5px;
+    border-radius: 4px;
 }
 
-input:disabled {
-    background-color: #f0f0f0;
+input:disabled, select:disabled {
+    background-color: #ececec;
     color: #666;
 }
 
@@ -68,25 +76,15 @@ input:disabled {
 .primary-action-container {
     display: flex;
     gap: 10px;
+    flex-direction: column;
 }
 
-.primary-action-container>button {
+.action-row {
+    display: flex;
+    gap: 10px;
+}
+
+.action-row>button {
     flex: 1;
     width: 100%;
 }
-
-/*button {*/
-/*    display: block;*/
-/*    width: 100%;*/
-/*    padding: 10px;*/
-/*    border: none;*/
-/*    border-radius: 4px;*/
-/*    background-color: #4CAF50;*/
-/*    color: white;*/
-/*    font-size: 16px;*/
-/*    cursor: pointer;*/
-/*}*/
-
-/*button:hover {*/
-/*    background-color: #45a049;*/
-/*}*/

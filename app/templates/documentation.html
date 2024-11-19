@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/item.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/qrcode_label.css') }}">
+{% endblock %}
+
+{% block main %}
+    <div class="item-card page-card" style="margin: auto">
+        <div class="card-header-container">
+            <h1 id="objectName">{% if document %}{{ document.description }}{% else %}Create Document{% endif %}</h1>
+            {% if document and current_user and current_user.is_admin %}
+                <div class="delete-button-container">
+                    <button type="button" id="deleteButton" class="btn btn-danger shadow-none"
+                            onclick="deleteObject('{{ url_for('api.delete_documentation', documentation_id=document.documentation_id) }}')">
+                        Delete
+                    </button>
+                    <button type="button" id="cancelDeleteButton" class="btn btn-secondary shadow-none"
+                            style="display: none;"
+                            onclick="cancelDelete()">
+                        Cancel
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+        <form id="objectForm">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
+            <div class="item-details">
+                <div class="detail">
+                    <label for="name" class="label">Description:</label>
+                    <input type="text" id="name" name="description" value="{{ (document.description if document) or '' }}"
+                           {% if document %}disabled{% endif %} required>
+                </div>
+                <div class="detail">
+                    <label for="url" class="label">URL:</label>
+                    <input type="text" id="url" name="url" value="{{ (document.url if document) or '' }}"
+                           {% if document %}disabled{% endif %} required>
+                </div>
+
+                <div class="detail">
+                    <label for="item_choices" class="label">Item:</label>
+                    <select name="item_id" id="item_choices" {% if document %}disabled{% endif %} required>
+                        {% if not document %}<option value=""> </option>{% endif %}
+                        {% for item in items %}
+                            <option value="{{ item.item_id }}"
+                                    {% if document and document.item_id == item.item_id %}selected{% endif %}>
+                                {{ item.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" id="objectId" name="documentation_id" value="{{ document.documentation_id if document }}" disabled readonly>
+
+            <p id="responseText"></p>
+            <div class="primary-action-container">
+                <div class="action-row">
+                    {% if current_user and current_user.is_authenticated %}
+                        {% if document %}
+                            <button type="button" id="cancelButton" class="btn btn-secondary shadow-none"
+                                    style="display: none;"
+                                    onclick="cancelEdit(`{{ url_for("api.get_documentation_by_id", documentation_id=document.documentation_id) }}`)">
+                                Cancel
+                            </button>
+                        {% endif %}
+                        <button type="button" id="editButton" class="btn btn-success shadow-none"
+                                onclick="toggleEdit('{% if document %}{{ url_for("api.update_documentation", documentation_id=document.documentation_id) }}{% else %}{{ url_for("api.create_documentation") }}{% endif %}')">
+                            {% if document %}Edit{% else %}Create{% endif %}
+                        </button>
+                    {% endif %}
+                </div>
+                <div class="action-row">
+                    {% if document %}
+                        <button type="button" id="printButton" class="btn btn-info shadow-none" style="color: white;"
+                                onclick="window.print()">
+                            Print Label
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if current_user and current_user.is_authenticated %}
+        <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
+    {% endif %}
+{% endblock %}
+
+{% block printable %}
+    {% if document and current_user and current_user.is_authenticated %}
+        <script src="{{ url_for('static', filename='javascript/checkout.js') }}"></script>
+        <script src="{{ url_for('static', filename='javascript/qrcode/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='javascript/qrcode/qrcode.js') }}"></script>
+
+        <div id="printableLabel">
+            <div id="qrcode"></div>
+            <div class="label-text">
+                <h1 class="label-name">
+                    {{ document.description }}
+                </h1>
+                {% if document.item_name %}
+                    <h2 class="label-item-location">
+                        {{ document.item_name }}
+                    </h2>
+                {% endif %}
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            new QRCode(document.getElementById("qrcode"), {
+                text: "{{ document.url }}",
+                width: 128,
+                height: 128,
+                {#correctionLevel: QRCode.CorrectLevel.M#}
+            });
+        </script>
+    {% endif %}
+{% endblock %}

@@ -7,29 +7,34 @@
 
 
 {% block main %}
-    {% if current_user.is_authenticated %}
-        <a href="{{ url_for('main.create_checkout') }}">Create</a>
-    {% endif %}
-    <div class="table-container" style="max-width: 1500px; margin: auto">
-        <table>
-            <thead>
-            <tr>
-                <th>Item Id</th>
-                <th>Employee Id</th>
-                <th>Checkout Date</th>
-                <th>Return Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for checkout in checkouts %}
-                <tr onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
-                    <td>{{ checkout.item_id }}</td>
-                    <td>{{ checkout.employee_id }}</td>
-                    <td>{{ checkout.checkout_date }}</td>
-                    <td>{{ checkout.returned_date }}</td>
+    <div class="page-container">
+        <div class="list-table highlightable page-card" style="max-width: 1200px;">
+            <div class="table-label">
+                <h3>Checkouts</h3>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.create_checkout') }}" class="btn btn-success" role="button">Create</a>
+                {% endif %}
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Item Id</th>
+                    <th>Employee Id</th>
+                    <th>Checkout Date</th>
+                    <th>Return Date</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for checkout in checkouts %}
+                    <tr onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
+                        <td>{{ checkout.item_id }}</td>
+                        <td>{{ checkout.employee_id }}</td>
+                        <td>{{ checkout.checkout_date }}</td>
+                        <td>{{ checkout.returned_date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

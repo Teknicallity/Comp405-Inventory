@@ -12,18 +12,13 @@ p, a, h1, h2, h3, h4, h5, h6 {
 }
 
 header {
-    background-color: lightblue;
     position: fixed;
     width: 100%;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
     height: 4rem;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
-    padding: 0 1em;
 }
 
 .header-link {
