@@ -10,8 +10,11 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-white">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand d-flex align-items-center" href="/">
                     <img src="{{ url_for('static', filename='images/inventory-logo.jpg') }}" alt="logo" class="img-fluid" style="width: 35px; height: 35px;">
+                    {% if current_user.is_authenticated %}
+                        <span class="navbar-text mx-4">Logged in as {{ current_user.username }}</span>
+                    {% endif %}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -19,7 +22,6 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         {% if current_user.is_authenticated %}
-                            <span class="navbar-text mx-2">Welcome, {{ current_user.username }}!</span>
                             <button type="button" class="btn btn-primary mx-1" onclick="window.location.href='/myProfile'">My Profile</button>
                             <form action="{{ url_for('auth.logout') }}" method="post" class="d-inline">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -35,10 +37,112 @@
         </nav>
     </header>
     {% block main %}
-        <br>
-        <a href="{{ url_for('main.all_items') }}">Items</a><br>
-        <a href="{{ url_for('main.all_checkouts') }}">Checkouts</a><br>
-        <a href="{{ url_for('main.all_employees') }}">Employees</a><br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" style="border: 1px solid #ddd; padding: 20px; background-color: #f8f9fa;">
+                    <a href="{{ url_for('main.all_items') }}" class="btn btn-primary btn-block mb-2">Items</a>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('main.create_item') }}">Create</a>
+                    {% endif %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Brand</th>
+                                    <th>Model Number</th>
+                                    <th>Serial Number</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr onclick="window.location.href='{{ url_for('main.item_details', item_id=item.item_id) }}';">
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.brand }}</td>
+                                    <td>{{ item.model }}</td>
+                                    <td>{{ item.serial }}</td>
+                                    <td>{{ item.location_id }}</td>
+                                    <td>{{ item.status_id }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6" style="border: 1px solid #ddd; padding: 20px; background-color: #f8f9fa;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div>
+                            <a href="{{ url_for('main.all_employees') }}" class="btn btn-primary">Employees</a>
+                            <a href="{{ url_for('main.filter_employees', filter='leads') }}" class="btn btn-info">Leads</a>
+                            <a href="{{ url_for('main.filter_employees', filter='reports') }}" class="btn btn-info">Reports</a>
+                        </div>
+                        <div>
+                            {% if current_user.is_authenticated and current_user.is_admin %}
+                                <a href="{{ url_for('main.create_employee') }}" class="btn btn-success">Create</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Title</th>
+                                    <th>Reports To</th>
+                                    <th>Username</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for employee in employees %}
+                                <tr onclick="window.location.href='{{ url_for('main.employee_details', employee_id=employee.employee_id) }}';">
+                                    <td>{{ employee.employee_id }}</td>
+                                    <td>{{ employee.first_name }}</td>
+                                    <td>{{ employee.last_name }}</td>
+                                    <td>{{ employee.title }}</td>
+                                    <td>{{ employee.reports_to_name }}</td>
+                                    <td>{{ employee.username }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12" style="border: 1px solid #ddd; padding: 20px; background-color: #f8f9fa;">
+                    <a href="{{ url_for('main.all_checkouts') }}" class="btn btn-primary btn-block mb-2">Checkouts</a>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('main.create_checkout') }}">Create</a>
+                    {% endif %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Item Id</th>
+                                    <th>Employee Id</th>
+                                    <th>Checkout Date</th>
+                                    <th>Return Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for checkout in checkouts %}
+                                <tr onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
+                                    <td>{{ checkout.item_id }}</td>
+                                    <td>{{ checkout.employee_id }}</td>
+                                    <td>{{ checkout.checkout_date }}</td>
+                                    <td>{{ checkout.returned_date }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
