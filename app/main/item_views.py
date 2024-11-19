@@ -9,7 +9,7 @@ from db.models.user_model import User
 @main.route('/inventory/items/')
 def all_items():
     items = get_all_items()
-    return render_template('item_list.html', items=items)
+    return render_template('home.html', items=items)
 
 
 @main.route('/inventory/items/<int:item_id>')
