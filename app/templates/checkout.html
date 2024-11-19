@@ -7,6 +7,7 @@
 
 
 {% block main %}
+    <div class="page-container">
     <div class="item-card page-card" style="margin: auto">
         <div class="card-header-container">
             <h1 id="objectName">{% if checkout %}Checkout {{ checkout.checkout_id }}{% else %}Create Checkout{% endif %}</h1>
@@ -74,6 +75,7 @@
                 {% endif %}
             </div>
         </form>
+    </div>
     </div>
     {% if (checkout and current_user.employee_id == checkout.employee_id) or (current_user.is_authenticated and current_user.is_admin) %}
         <script src="{{ url_for('static', filename='javascript/update_form.js') }}"></script>
