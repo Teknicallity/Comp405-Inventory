@@ -86,3 +86,44 @@ INSERT INTO items (name, serial, location_id) VALUES
     ('Safety Goggles', 'SFT001', 6),
     ('Respirator Mask', 'SFT002', 6),
     ('First Aid Kit', 'SFT003', 6);
+
+INSERT INTO documentation (url, description, item_id) VALUES
+    ('https://example.com/hammer-guide', 'Hammer user guide', 1),
+    ('https://example.com/hammer-tips', 'Hammer usage tips', 1),
+
+    ('https://example.com/screwdriver-guide', 'Screwdriver instructions', 2),
+    ('https://example.com/screwdriver-set-maintenance', 'Maintenance tips', 2),
+
+    ('https://example.com/measuring-tape', 'Measurement guide', 3),
+
+    ('https://example.com/drill-setup', 'Setup instructions', 4),
+    ('https://example.com/drill-safety', 'Drill safety tips', 4),
+
+    ('https://example.com/saw-guide', 'Saw instructions', 5),
+
+    ('https://example.com/nail-gun', 'Nail gun guide', 6),
+    ('https://example.com/nail-gun-safety', 'Safety instructions', 6),
+
+    ('https://example.com/battery-pack', 'Charging instructions', 7),
+
+    ('https://example.com/sander-setup', 'Setup guide', 8),
+    ('https://example.com/sander-maintenance', 'Maintenance tips', 8),
+
+    ('https://example.com/paint-brushes', 'Cleaning instructions', 9),
+
+    ('https://example.com/paint-cans', 'Storage guidelines', 10),
+
+    ('https://example.com/multimeter-guide', 'Multimeter usage', 11),
+    ('https://example.com/multimeter-safety', 'Safety precautions', 11),
+
+    ('https://example.com/wire-cutter', 'Wire cutter tips', 12),
+
+    ('https://example.com/soldering-iron', 'Soldering guide', 13),
+
+    ('https://example.com/safety-goggles', 'Safety instructions', 14),
+    ('https://example.com/safety-tips', 'General safety tips', 14),
+
+    ('https://example.com/respirator-mask', 'Respirator usage', 15),
+
+    ('https://example.com/first-aid', 'First aid instructions', 16),
+    ('https://example.com/emergency-tips', 'Emergency usage tips', 16);
