@@ -1,3 +1,4 @@
+import csv
 import sys
 
 import click
@@ -62,3 +63,57 @@ def ensure_admin():
             click.echo('Environment defined admin user exists')
     else:
         click.echo('Environment admin user not defined')
+
+
+@click.command('create-employee')
+@click.option('--file', '-F', type=click.Path(exists=True, dir_okay=False),
+              help='CSV file with employees')
+@click.option('--first', '-f', help='First Name (required if not using --file)')
+@click.option('--last', '-l', help='Last Name (required if not using --file)')
+@click.option('--title', '-t', help='Employee Title (required if not using --file)')
+@click.option('--username', '-u', help='Username (required if not using --file)')
+@click.option('--admin', '-a', is_flag=True, default=False, help='User is admin?')
+def create_employee_command(file, first, last, title, username, admin):
+    """
+    Creates an employee or bulk creates employees from a CSV file.
+    """
+    if file:
+        # Bulk creation from CSV
+        try:
+            with open(file, newline='') as csvfile:
+                reader: csv.DictReader = csv.DictReader(csvfile)
+                for row in reader:
+                    _create_employee(
+                        first_name=row.get('first_name'),
+                        last_name=row.get('last_name'),
+                        title=row.get('title'),
+                        reports_to_id=int(row.get('reports_to_id', 0)) or None,
+                        username=row.get('username'),
+                        password=row.get('password'),
+                        is_admin=row.get('is_admin', 'false').lower() == 'true'
+                    )
+            click.echo(f"Employees from {file} created successfully.")
+        except Exception as e:
+            click.echo(f"Error reading file: {e}")
+    else:
+        # Single employee creation
+        if not (first and last and title and username):
+            click.echo("Error: Missing required fields: --first, --last, --title, and --username.")
+            return
+        password = click.prompt('Password', hide_input=True, confirmation_prompt=True)
+        _create_employee(first_name=first, last_name=last, title=title, username=username,
+                         password=password, is_admin=admin)
+        click.echo(f"Employee {first} {last} created successfully.")
+
+
+def _create_employee(first_name, last_name, title, reports_to_id, username, password, is_admin):
+    employee = EmployeeModel(
+        first_name=first_name,
+        last_name=last_name,
+        title=title,
+        reports_to=reports_to_id,
+        username=username,
+        password=password,
+        is_admin=is_admin
+    )
+    add_employee(employee)

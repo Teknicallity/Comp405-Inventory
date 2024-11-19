@@ -7,3 +7,4 @@ def init_app(app):
     app.cli.add_command(cmd.init_db_command)
     app.cli.add_command(cmd.create_admin_command)
     app.cli.add_command(cmd.ensure_admin)
+    app.cli.add_command(cmd.create_employee_command)
