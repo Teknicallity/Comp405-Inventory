@@ -105,3 +105,19 @@ def delete_employee(employee_id):
         'message': 'Employee deleted successfully',
         'next_url': next or url_for('main.all_employees')
     }), 200
+
+@api.route('/employees/filter/', methods=['GET'])
+@login_required
+def filter_employees():
+    user: User = current_user
+    if not user.is_admin:
+        return abort(401)
+    
+    filter_type = request.args.get('filter', 'reports')
+    
+    if filter_type == 'leads':
+        employees = employee_model.get_employees_by_reports_to(None)
+    else:
+        employees = employee_model.get_employees_by_reports_to(not None)
+    
+    return jsonify(list(map((lambda employee: employee.to_dict()), employees))), 200
