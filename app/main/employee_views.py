@@ -1,8 +1,8 @@
 from flask_login import login_required, current_user
-from flask import render_template, abort
+from flask import render_template, abort, request
 
 from app.main import main
-from db.models.employee_model import get_all_employees, get_employee_by_id
+from db.models.employee_model import get_all_employees, get_employee_by_id, get_employees_by_reports_to
 from db.models.user_model import User
 
 
@@ -13,7 +13,7 @@ def all_employees():
     if not user.is_admin:
         return abort(403)
     employees = get_all_employees()
-    return render_template('employee_list.html', employees=employees)
+    return render_template('home.html', employees=employees)
 
 
 @main.route('/employees/<int:employee_id>')
@@ -35,3 +35,20 @@ def create_employee():
     if not user.is_admin:
         return abort(403)
     return render_template('employee.html')
+
+
+@main.route('/employees/filter/')
+@login_required
+def filter_employees():
+    user: User = current_user
+    if not user.is_admin:
+        return abort(403)
+    
+    filter_type = request.args.get('filter', 'reports')
+    
+    if filter_type == 'leads':
+        employees = get_employees_by_reports_to(None)
+    else:
+        employees = get_employees_by_reports_to(not None)
+    
+    return render_template('home.html', employees=employees)
