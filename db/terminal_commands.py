@@ -14,7 +14,7 @@ from db.models.user_model import add_user, user_exists
 @click.option('--reset', '-r', is_flag=True, default=False,
               help='Reset the database to a clean state before initialization')
 def init_db_command(reset):
-    """Command-line command to initialize the database."""
+    """Initialize the database with schema file."""
     try:
         if reset:
             _destroy_database()
@@ -49,7 +49,7 @@ def create_admin_command(username):
 
 @click.command('ensure-admin')
 def ensure_admin():
-    """Creates an admin user from config or environment variables if user doesn't exist'."""
+    """Creates an admin user from config or env."""
     if current_app.config['ADMIN_USER']:
         if not user_exists(current_app.config['ADMIN_USER']):
 
@@ -75,7 +75,7 @@ def ensure_admin():
 @click.option('--admin', '-a', is_flag=True, default=False, help='User is admin?')
 def create_employee_command(file, first, last, title, username, admin):
     """
-    Creates an employee or bulk creates employees from a CSV file.
+    Creates an employee interactively or from CSV file.
     """
     if file:
         # Bulk creation from CSV
@@ -117,3 +117,28 @@ def _create_employee(first_name, last_name, title, reports_to_id, username, pass
         is_admin=is_admin
     )
     add_employee(employee)
+
+
+@click.command('reset')
+@click.option('--yes', '-y', is_flag=True, expose_value=False,
+              prompt='Are you sure you want completely reset?')
+@click.pass_context
+def master_reset_command(ctx):
+    """Complete reset: init-db, ensure-admin, create-employee."""
+    try:
+        ctx.invoke(init_db_command, reset=True)
+    except Exception as e:
+        click.echo(f"Error resetting database: {e}")
+        sys.exit(1)
+
+    try:
+        ctx.invoke(ensure_admin)
+    except Exception as e:
+        click.echo(f"Error creating admin user from env: {e}")
+        sys.exit(1)
+
+    try:
+        ctx.invoke(create_employee_command, file='employees.csv')
+    except Exception as e:
+        click.echo(f"Error creating employee from employees.csv: {e}")
+        sys.exit(1)
