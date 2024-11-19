@@ -3,28 +3,24 @@
 #### *Currently in Development*
 
 ## How to Run
+### Production
+With Docker installed, use the [docker compose file](docker-compose.yaml).\
+Be sure to set `MYSQL_PASSWORD` on both containers and `ADMIN_PASSWORD` for this container.
+
 ### Development
-Initialize the database (add `-r` to hard reset):
+
+To completely recreate the database (add `-y` to override prompt):
 ```
-flask --app inventory-system init-db
+flask --app inventory-system reset
 ```
 
-To create an admin user from the dev config with username `root` and password `password`:
+Also take a look at the help menu for more commands:
 ```
-flask --app inventory-system ensure-admin
-```
-or to create a custom admin user:
-```
-flask --app inventory-system create-admin
+flask --app inventory-system --help
 ```
 
 Run the development server:
 ```
 flask --app inventory-system --debug run
 ```
-The frontend is now available at http://localhost:5000
-
-
-### Production
-Use the [docker compose file](docker-compose.yaml).\
-Be sure to set `MYSQL_PASSWORD` on both containers and `ADMIN_PASSWORD` for this container.
+The frontend is now available at http://127.0.0.1:5000

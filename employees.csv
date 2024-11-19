@@ -1,0 +1,6 @@
+first_name,last_name,title,reports_to_id,username,password,is_admin
+Steven,Sousa,CEO,0,ssousa,thousand3,true
+Josh,Sheputa,COO,1,jshep,officeengine1,true
+Seikyung,Jung,Auditor,0,drjung,nullpointer8,true
+Grace,Hopper,Head Engineer,2,hopper,nvidiagh200,false
+Alan,Turing,Lead Designer,3,turing,cryptographic9,false
