@@ -51,7 +51,7 @@
                             </div>
                             <div>
                                 {% if current_user.is_authenticated and current_user.is_admin %}
-                                    <a href="{{ url_for('main.create_employee') }}" class="btn btn-success">
+                                    <a href="{{ url_for('main.create_employee') }}" class="btn btn-success btn-block mb-2">
                                         <img src="{{ url_for('static', filename='images/add-user.png') }}" alt="Add" style="width: 24px; height: 24px;">
                                     </a>
                                 {% endif %}
@@ -97,6 +97,7 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
+                                    <th>Checkout Id</th>
                                     <th>Item Id</th>
                                     <th>Employee Id</th>
                                     <th>Checkout Date</th>
@@ -106,6 +107,7 @@
                                 <tbody>
                                 {% for checkout in checkouts %}
                                     <tr onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
+                                        <td>{{ checkout.checkout_id }}</td>
                                         <td>{{ checkout.item_id }}</td>
                                         <td>{{ checkout.employee_id }}</td>
                                         <td>{{ checkout.checkout_date }}</td>
