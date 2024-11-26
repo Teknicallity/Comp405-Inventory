@@ -9,8 +9,12 @@
             {% if current_user.is_authenticated %}
                 <div class="row">
                     <div class="col-md-7" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px; background-color: #f8f9fa;">
-                        <a href="{{ url_for('main.all_items') }}" class="btn btn-primary btn-block mb-2">Items</a>
-                        <a href="{{ url_for('main.create_item') }}">Create</a>
+                        <div class="d-flex justify-content-between mb-2">
+                            <a href="{{ url_for('main.all_items') }}" class="btn btn-primary btn-block mb-2">Items</a>
+                            <a href="{{ url_for('main.create_item') }}" class="btn btn-success btn-block mb-2">
+                                <img src="{{ url_for('static', filename='images/add-item.png') }}" alt="Add" style="width: 24px; height: 24px;">
+                            </a>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -47,7 +51,9 @@
                             </div>
                             <div>
                                 {% if current_user.is_authenticated and current_user.is_admin %}
-                                    <a href="{{ url_for('main.create_employee') }}" class="btn btn-success">Create</a>
+                                    <a href="{{ url_for('main.create_employee') }}" class="btn btn-success">
+                                        <img src="{{ url_for('static', filename='images/add-user.png') }}" alt="Add" style="width: 24px; height: 24px;">
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>
@@ -81,8 +87,12 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-12" style="border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f8f9fa;">
-                        <a href="{{ url_for('main.all_checkouts') }}" class="btn btn-primary btn-block mb-2">Checkouts</a>
-                        <a href="{{ url_for('main.create_checkout') }}">Create</a>
+                        <div class="d-flex justify-content-between mb-2">
+                            <a href="{{ url_for('main.all_checkouts') }}" class="btn btn-primary btn-block mb-2">Checkouts</a>
+                            <a href="{{ url_for('main.create_checkout') }}" class="btn btn-success btn-block mb-2">
+                                <img src="{{ url_for('static', filename='images/checkout.png') }}" alt="Add" style="width: 24px; height: 24px;">
+                            </a>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
