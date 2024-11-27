@@ -25,6 +25,8 @@ chown www-data: /etc/comp405-inventory
 flask --app inventory-system init-db
 
 if str_to_bool "$RESET_ON_RESTART"; then
+  flask --app inventory-system reset -y
+elif str_to_bool "$CLEAR_DB_ON_RESTART"; then
   flask --app inventory-system init-db -r
 fi
 
