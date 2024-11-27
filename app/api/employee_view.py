@@ -118,11 +118,15 @@ def delete_employee(employee_id):
 def filter_employees():
     user: User = current_user
     
-    filter_type = request.args.get('filter', 'reports')
-    
+    filter_type = request.args.get('filter', None)
+
     if filter_type == 'leads':
         employees = employee_model.get_employees_by_reports_to(None)
-    else:
+    elif filter_type == 'reports':
         employees = employee_model.get_employees_by_reports_to(not None)
+    elif filter_type is None:
+        employees = employee_model.get_all_employees()
+    else:
+        return jsonify({'error': 'Invalid filter type'}), 400
     
     return jsonify(list(map((lambda employee: employee.to_dict()), employees))), 200
