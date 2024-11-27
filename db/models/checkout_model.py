@@ -4,12 +4,15 @@ from db.connection import get_db
 
 
 class CheckoutModel:
-    def __init__(self, item_id, employee_id=None, checkout_date=None, returned_date: datetime = None, checkout_id=None):
+    def __init__(self, item_id, employee_id=None, checkout_date=None, returned_date: datetime = None, checkout_id=None,
+                 item_name=None, employee_name=None):
         self.checkout_id = checkout_id
         self.item_id = item_id
         self.employee_id = employee_id
         self.checkout_date = checkout_date
         self.returned_date = returned_date
+        self.item_name = item_name
+        self.employee_name = employee_name
 
     @classmethod
     def from_row(cls, row):
@@ -18,7 +21,9 @@ class CheckoutModel:
             item_id=row[1],
             employee_id=row[2],
             checkout_date=row[3],
-            returned_date=row[4]
+            returned_date=row[4],
+            item_name=row[5],
+            employee_name=row[6]
         ) if row else None
 
     @classmethod
@@ -32,6 +37,8 @@ class CheckoutModel:
             'employee_id': self.employee_id,
             'checkout_date': self.checkout_date,
             'returned_date': self.returned_date,
+            'item_name': self.item_name,
+            'employee_name': self.employee_name,
         }
 
 
@@ -39,8 +46,11 @@ def get_all_checkouts() -> list:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''
-            SELECT c.checkout_id, c.item_id, c.employee_id, c.checkout_date, c.returned_date
+            SELECT c.checkout_id, c.item_id, c.employee_id, c.checkout_date, c.returned_date, i.name,
+                CONCAT(e.first_name, ' ', e.last_name)
             FROM checkouts c
+            LEFT JOIN items i ON c.item_id = i.item_id
+            LEFT JOIN employees e ON c.employee_id = e.employee_id
         ''')
         return CheckoutModel.list_from_rows(cursor.fetchall())
 
@@ -61,8 +71,11 @@ def get_checkout_by_id(checkout_id: int) -> CheckoutModel:
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute('''
-            SELECT c.checkout_id, c.item_id, c.employee_id, c.checkout_date, c.returned_date
+            SELECT c.checkout_id, c.item_id, c.employee_id, c.checkout_date, c.returned_date, i.name,
+                CONCAT(e.first_name, ' ', e.last_name)
             FROM checkouts c
+            LEFT JOIN items i ON c.item_id = i.item_id
+            LEFT JOIN employees e ON c.employee_id = e.employee_id
             WHERE checkout_id = %s
         ''', (checkout_id,))
         return CheckoutModel.from_row(cursor.fetchone())
