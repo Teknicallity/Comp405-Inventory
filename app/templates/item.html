@@ -74,41 +74,43 @@
                             </div>
                             <input type="hidden" id="objectId" name="item_id" value="{{ item.item_id if item }}" disabled readonly>
                             <p id="responseText"></p>
-                            <div class="form-group">
-                                {% if current_user and current_user.is_admin %}
+                            <div class="primary-action-container">
+                                <div class="action-row">
+                                    {% if current_user and current_user.is_admin %}
+                                        {% if item %}
+                                            <button type="button" id="cancelButton" class="btn btn-secondary shadow-none"
+                                                    style="display: none;"
+                                                    onclick="cancelEdit(`{{ url_for("api.get_single_item", item_id=item.item_id) }}`)">
+                                                Cancel
+                                            </button>
+                                        {% endif %}
+                                        <button type="button" id="editButton" class="btn btn-success shadow-none"
+                                                onclick="toggleEdit('{% if item %}{{ url_for("api.update_item", item_id=item.item_id) }}{% else %}{{ url_for("api.create_item") }}{% endif %}')">
+                                            {% if item %}Edit{% else %}Create{% endif %}
+                                        </button>
+                                    {% endif %}
+                                </div>
+                                <div class="action-row">
                                     {% if item %}
-                                        <button type="button" id="cancelButton" class="btn btn-secondary"
-                                                style="display: none;"
-                                                onclick="cancelEdit(`{{ url_for("api.get_single_item", item_id=item.item_id) }}`)">
-                                            Cancel
+                                        <button type="button" id="printButton" class="btn btn-info shadow-none" style="color: white;"
+                                                onclick="window.print()">
+                                            Print Label
                                         </button>
                                     {% endif %}
-                                    <button type="button" id="editButton" class="btn btn-success w-100"
-                                            onclick="toggleEdit('{% if item %}{{ url_for("api.update_item", item_id=item.item_id) }}{% else %}{{ url_for("api.create_item") }}{% endif %}')">
-                                        {% if item %}Edit{% else %}Create{% endif %}
-                                    </button>
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {% if item %}
-                                    <button type="button" id="printButton" class="btn btn-info w-100" style="color: white;"
-                                            onclick="window.print()">
-                                        Print Label
-                                    </button>
-                                {% endif %}
-                                {% if item and current_user and current_user.is_authenticated %}
-                                    {% if item.status_id == 1 %}
-                                        <button type="button" id="checkoutButton" class="btn btn-primary w-100"
-                                                onclick="checkout('{{ url_for("api.create_checkout") }}', {{ item.item_id }})">
-                                            Checkout
-                                        </button>
-                                    {% elif item.status_id == 2 %}
-                                        <button type="button" id="returnCheckoutButton" class="btn btn-primary w-100"
-                                                onclick="returnCheckout('{{ url_for("api.return_item_by_id", item_id=item.item_id) }}')">
-                                            Return
-                                        </button>
+                                    {% if item and current_user and current_user.is_authenticated %}
+                                        {% if item.status_id == 1 %}
+                                            <button type="button" id="checkoutButton" class="btn btn-primary shadow-none"
+                                                    onclick="checkout('{{ url_for("api.create_checkout") }}', {{ item.item_id }})">
+                                                Checkout
+                                            </button>
+                                        {% elif item.status_id == 2 %}
+                                            <button type="button" id="returnCheckoutButton" class="btn btn-primary shadow-none"
+                                                    onclick="returnCheckout('{{ url_for("api.return_item_by_id", item_id=item.item_id) }}')">
+                                                Return
+                                            </button>
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
+                                </div>
                             </div>
                         </form>
                     </div>

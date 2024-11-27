@@ -78,20 +78,22 @@
                             {% endif %}
                             <input type="hidden" id="objectId" name="employee_id" value="{{ (employee.employee_id if employee) }}" disabled readonly>
                             <p id="responseText"></p>
-                            <div class="d-flex justify-content-between">
-                                {% if current_user.is_authenticated %}
-                                    {% if employee %}
-                                        <button type="button" id="cancelButton" class="btn btn-secondary"
-                                                style="display: none;"
-                                                onclick="cancelEdit(`{{ url_for("api.get_employee", employee_id=employee.employee_id) }}`)">
-                                            Cancel
+                            <div class="primary-action-container">
+                                <div class="action-row">
+                                    {% if current_user.is_authenticated %}
+                                        {% if employee %}
+                                            <button type="button" id="cancelButton" class="btn btn-secondary shadow-none"
+                                                    style="display: none;"
+                                                    onclick="cancelEdit(`{{ url_for("api.get_employee", employee_id=employee.employee_id) }}`)">
+                                                Cancel
+                                            </button>
+                                        {% endif %}
+                                        <button type="button" id="editButton" class="btn btn-success shadow-none"
+                                                onclick="toggleEdit('{% if employee %}{{ url_for("api.update_employee", employee_id=employee.employee_id) }}{% else %}{{ url_for("api.create_employee") }}{% endif %}')">
+                                            {% if employee %}Edit{% else %}Create{% endif %}
                                         </button>
                                     {% endif %}
-                                    <button type="button" id="editButton" class="btn btn-success w-100"
-                                            onclick="toggleEdit('{% if employee %}{{ url_for("api.update_employee", employee_id=employee.employee_id) }}{% else %}{{ url_for("api.create_employee") }}{% endif %}')">
-                                        {% if employee %}Edit{% else %}Create{% endif %}
-                                    </button>
-                                {% endif %}
+                                </div>
                             </div>
                         </form>
                     </div>
