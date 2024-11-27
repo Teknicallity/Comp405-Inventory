@@ -77,24 +77,20 @@ def get_employee_by_id(employee_id: int) -> EmployeeModel:
 def get_employees_by_reports_to(reports_to) -> list:
     db = get_db()
     with db.cursor() as cursor:
+        query = '''
+            SELECT e.employee_id, e.first_name, e.last_name, e.title, e.reports_to,
+                       CONCAT(r.first_name, ' ', r.last_name), u.username, u.is_admin
+            FROM employees e
+            LEFT JOIN employees r ON e.reports_to = r.employee_id
+            LEFT JOIN users u ON e.employee_id = u.employee_id
+        '''
+
         if reports_to is None:
-            cursor.execute('''
-                SELECT e.employee_id, e.first_name, e.last_name, e.title, e.reports_to,
-                       CONCAT(r.first_name, ' ', r.last_name), u.username, u.is_admin
-                FROM employees e
-                LEFT JOIN employees r ON e.reports_to = r.employee_id
-                LEFT JOIN users u ON e.employee_id = u.employee_id
-                WHERE e.reports_to IS NULL
-            ''')
+            full_query = query + ' WHERE e.reports_to IS NULL'
         else:
-            cursor.execute('''
-                SELECT e.employee_id, e.first_name, e.last_name, e.title, e.reports_to,
-                       CONCAT(r.first_name, ' ', r.last_name), u.username, u.is_admin
-                FROM employees e
-                LEFT JOIN employees r ON e.reports_to = r.employee_id
-                LEFT JOIN users u ON e.employee_id = u.employee_id
-                WHERE e.reports_to IS NOT NULL
-            ''')
+            full_query = query + ' WHERE e.reports_to IS NOT NULL'
+
+        cursor.execute(full_query)
         return EmployeeModel.list_from_row(cursor.fetchall())
 
 
