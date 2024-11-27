@@ -119,8 +119,13 @@ def _create_employee(first_name, last_name, title, reports_to_id, username, pass
     add_employee(employee)
 
 
+def abort_if_false(ctx, param, value):
+    if not value:
+        ctx.abort()
+
+
 @click.command('reset')
-@click.option('--yes', '-y', is_flag=True, expose_value=False,
+@click.option('--yes', '-y', is_flag=True, expose_value=False, callback=abort_if_false,
               prompt='Are you sure you want completely reset?')
 @click.pass_context
 def master_reset_command(ctx):
