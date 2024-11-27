@@ -5,6 +5,7 @@
 /config/dev.py
 /config/test.py
 !/db
+!/employees.csv
 !/inventory-system.py
 !/LICENSE
 !/requirements.txt
