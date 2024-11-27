@@ -12,12 +12,12 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h1 id="objectName">{% if checkout %}Checkout {{ checkout.checkout_id }}{% else %}Create Checkout{% endif %}</h1>
                         {% if checkout %}
-                            <div>
-                                <button type="button" id="deleteButton" class="btn btn-danger"
+                            <div class="delete-button-container d-flex">
+                                <button type="button" id="deleteButton" class="btn btn-danger btn-sm"
                                         onclick="deleteObject('{{ url_for('api.delete_checkout', checkout_id=checkout.checkout_id) }}')">
                                     Delete
                                 </button>
-                                <button type="button" id="cancelDeleteButton" class="btn btn-secondary"
+                                <button type="button" id="cancelDeleteButton" class="btn btn-secondary btn-sm ms-1"
                                         style="display: none;"
                                         onclick="cancelDelete()">
                                     Cancel
@@ -58,15 +58,15 @@
                             <input type="hidden" id="objectId" name="checkout_id" value="{{ checkout.checkout_id if checkout }}"
                                 disabled readonly>
                             <p id="responseText"></p>
-                            <div class="form-group">
+                            <div class="primary-action-container">
                                 {% if (checkout and current_user.employee_id == checkout.employee_id) or (current_user.is_authenticated and current_user.is_admin) %}
                                     {% if checkout and checkout.returned_date in (None, "") %}
-                                        <button type="button" id="returnButton" class="btn btn-primary"
+                                        <button type="button" id="returnButton" class="btn btn-primary shadow-none"
                                                 onclick="returnCheckout('{{ url_for("api.return_checkout_by_id", checkout_id=checkout.checkout_id) }}')">
                                             Return Checkout
                                         </button>
                                     {% elif not checkout %}
-                                        <button type="button" id="editButton" class="btn btn-success btn-block w-100"
+                                        <button type="button" id="editButton" class="btn btn-success shadow-none"
                                                 onclick="toggleEdit('{{ url_for("api.create_checkout") }}')">
                                             Create
                                         </button>

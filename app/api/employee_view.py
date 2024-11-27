@@ -8,6 +8,7 @@ from db.models import employee_model
 
 
 @api.route('/employees/')
+@login_required
 def all_employees():
     employees = employee_model.get_all_employees()
     return jsonify(list(map((lambda employee: employee.to_dict()), employees))), 200
@@ -46,6 +47,7 @@ def create_employee():
 
 
 @api.route('/employees/<int:employee_id>/', methods=['GET'])
+@login_required
 def get_employee(employee_id):
     employee = employee_model.get_employee_by_id(employee_id)
     if employee:
@@ -95,6 +97,10 @@ def update_employee(employee_id):
 @api.route('/employees/<int:employee_id>/', methods=['DELETE'])
 @login_required
 def delete_employee(employee_id):
+    user: User = current_user
+    if not user.is_admin:
+        return abort(401)
+
     employee = employee_model.get_employee_by_id(employee_id)
     next = request.args.get('next')
     if not employee:
@@ -106,18 +112,21 @@ def delete_employee(employee_id):
         'next_url': next or url_for('main.all_employees')
     }), 200
 
+
 @api.route('/employees/filter/', methods=['GET'])
 @login_required
 def filter_employees():
     user: User = current_user
-    if not user.is_admin:
-        return abort(401)
     
-    filter_type = request.args.get('filter', 'reports')
-    
+    filter_type = request.args.get('filter', None)
+
     if filter_type == 'leads':
         employees = employee_model.get_employees_by_reports_to(None)
-    else:
+    elif filter_type == 'reports':
         employees = employee_model.get_employees_by_reports_to(not None)
+    elif filter_type is None:
+        employees = employee_model.get_all_employees()
+    else:
+        return jsonify({'error': 'Invalid filter type'}), 400
     
     return jsonify(list(map((lambda employee: employee.to_dict()), employees))), 200

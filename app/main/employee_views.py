@@ -10,8 +10,7 @@ from db.models.user_model import User
 @login_required
 def all_employees():
     user: User = current_user
-    if not user.is_admin:
-        return abort(403)
+
     employees = get_all_employees()
     return render_template('employee_list.html', employees=employees)
 
@@ -45,8 +44,6 @@ def create_employee():
 @login_required
 def filter_employees():
     user: User = current_user
-    if not user.is_admin:
-        return abort(403)
 
     filter_type = request.args.get('filter', 'reports')
 
