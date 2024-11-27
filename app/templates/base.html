@@ -26,7 +26,10 @@
                 <div class="navbar-nav">
                     {% if current_user.is_authenticated %}
                         {% if current_user.employee_id %}
-                            <button type="button" class="btn btn-primary mx-1" onclick="window.location.href='/myProfile'">My Profile</button>
+                            <button type="button" class="btn btn-primary mx-1"
+                                    onclick="window.location.href='{{ url_for('main.employee_details', employee_id=current_user.employee_id) }}'">
+                                My Profile
+                            </button>
                         {% endif %}
                         <form action="{{ url_for('auth.logout') }}" method="post" class="d-inline">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
