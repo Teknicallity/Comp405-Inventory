@@ -15,11 +15,11 @@
                         <h2 id="objectName">{% if document %}{{ document.description }}{% else %}Create Document{% endif %}</h2>
                         {% if document and current_user and current_user.is_admin %}
                             <div class="delete-button-container d-flex">
-                                <button type="button" id="deleteButton" class="btn btn-danger btn-sm me-1"
+                                <button type="button" id="deleteButton" class="btn btn-danger btn-sm"
                                         onclick="deleteObject('{{ url_for('api.delete_documentation', documentation_id=document.documentation_id) }}')">
                                     Delete
                                 </button>
-                                <button type="button" id="cancelDeleteButton" class="btn btn-secondary btn-sm"
+                                <button type="button" id="cancelDeleteButton" class="btn btn-secondary btn-sm ms-1"
                                         style="display: none;"
                                         onclick="cancelDelete()">
                                     Cancel

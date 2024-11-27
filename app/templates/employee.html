@@ -12,12 +12,12 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h1 id="objectName">{% if employee %}{{ employee.first_name }}{% else %}Create Employee{% endif %}</h1>
                         {% if employee and current_user and current_user.is_admin %}
-                            <div>
-                                <button type="button" id="deleteButton" class="btn btn-danger"
+                            <div class="delete-button-container d-flex">
+                                <button type="button" id="deleteButton" class="btn btn-danger btn-sm"
                                         onclick="deleteObject('{{ url_for('api.delete_employee', employee_id=employee.employee_id) }}')">
                                     Delete
                                 </button>
-                                <button type="button" id="cancelDeleteButton" class="btn btn-secondary"
+                                <button type="button" id="cancelDeleteButton" class="btn btn-secondary btn-sm ms-1"
                                         style="display: none;"
                                         onclick="cancelDelete()">
                                     Cancel
