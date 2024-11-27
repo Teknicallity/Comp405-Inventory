@@ -81,6 +81,12 @@ jobs:
           docker tag teknicallity/comp405-inventory:${{ github.ref_name }} teknicallity/comp405-inventory:latest
           docker push teknicallity/comp405-inventory:latest
 
+      - name: Tag as latest-pre (only for pre-release)
+        if: env.PRE_RELEASE == 'true'
+        run: |
+          docker tag teknicallity/comp405-inventory:${{ github.ref_name }} teknicallity/comp405-inventory:latest-pre
+          docker push teknicallity/comp405-inventory:latest-pre
+
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v4
         with:
