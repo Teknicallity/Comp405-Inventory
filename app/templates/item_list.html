@@ -12,7 +12,9 @@
             <div class="table-label">
                 <h3>Items</h3>
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('main.create_item') }}" class="btn btn-success" role="button">Create</a>
+                    <a href="{{ url_for('main.create_item') }}" class="btn btn-success btn-block mb-2" role="button">
+                        <img src="{{ url_for('static', filename='images/add-item.png') }}" alt="Add" style="width: 24px; height: 24px;">
+                    </a>
                 {% endif %}
             </div>
             <table>
