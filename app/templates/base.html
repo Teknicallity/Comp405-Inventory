@@ -30,7 +30,7 @@
                 <div class="navbar-nav d-flex align-items-end">
                     {% if current_user.is_authenticated %}
                         {% if current_user.employee_id %}
-                            <button type="button" class="btn btn-primary mx-1"
+                            <button type="button" class="btn btn-primary mx-1 my-2 my-md-0"
                                     style="min-width: 120px;"
                                     onclick="window.location.href='{{ url_for('main.employee_details', employee_id=current_user.employee_id) }}'">
                                 My Profile
@@ -41,7 +41,7 @@
                             <button type="submit" class="btn btn-danger mx-1" style="min-width: 120px;">Log Out</button>
                         </form>
                     {% else %}
-                        <button type="button" class="btn btn-primary mx-1" style="min-width: 120px;"
+                        <button type="button" class="btn btn-primary mx-1 my-2 my-md-0" style="min-width: 120px;"
                                 onclick="window.location.href='{{ url_for('auth.login') }}'">
                             Login
                         </button>
