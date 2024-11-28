@@ -1,4 +1,4 @@
-function filterTable(filter, currentUserName, isAdmin) {
+function filterEmployee(filter, currentUserName, isAdmin) {
     const tableBody = document.getElementById("employeeTableBody");
     const rows = tableBody.getElementsByTagName("tr");
 
