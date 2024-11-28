@@ -40,8 +40,7 @@
                         </thead>
                         <tbody id="itemTableBody">
                             {% for item in items %}
-                            <tr
-                                onclick="window.location.href='{{ url_for('main.item_details', item_id=item.item_id) }}';">
+                            <tr onclick="window.location.href='{{ url_for('main.item_details', item_id=item.item_id) }}';">
                                 <td>{{ item.name }}</td>
                                 <td>{{ item.brand }}</td>
                                 <td>{{ item.model }}</td>
@@ -54,8 +53,7 @@
                     </table>
                 </div>
             </div>
-            <div class="col-md-5"
-                style="border: 1px solid #ddd; border-radius: 10px; padding: 10px; background-color: #f8f9fa;">
+            <div class="col-md-5" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px; background-color: #f8f9fa;">
                 <div class="d-flex justify-content-between mb-2">
                     <script>
                         const currentUserName = "{{ current_user.username }}";
@@ -71,63 +69,11 @@
                         <button class="btn btn-primary" onclick="filterEmployeeTable('all')">Employees</button>
                         <button class="btn btn-info" onclick="filterEmployeeTable('leads')">Leads</button>
                         <button class="btn btn-info" onclick="filterEmployeeTable('reports')">Reports</button>
-                    <div class="col-md-5" style="border: 1px solid #ddd; border-radius: 10px; padding: 10px; background-color: #f8f9fa;">
-                        <div class="d-flex justify-content-between mb-2">
-                            <script>
-                                const currentUserName = "{{ current_user.username }}";
-                                const isAdmin = {{ current_user.is_admin | tojson }};
-                            </script>
-                            <script src="{{ url_for('static', filename='javascript/employee_filter.js') }}"></script>
-                            <script>
-                                function filterTableWrapper(filter) {
-                                    filterTable(filter, currentUserName, isAdmin);
-                                }
-                            </script>
-                            <div>
-                                <button class="btn btn-primary" onclick="filterTableWrapper('all')">Employees</button>
-                                <button class="btn btn-info" onclick="filterTableWrapper('leads')">Leads</button>
-                                <button class="btn btn-info" onclick="filterTableWrapper('reports')">Reports</button>
-                            </div>
-                            <div>
-                                {% if current_user.is_authenticated and current_user.is_admin %}
-                                    <a href="{{ url_for('main.create_employee') }}" class="btn btn-success btn-block mb-2">
-                                        <img src="{{ url_for('static', filename='images/add-user.png') }}" alt="Add" style="width: 24px; height: 24px;">
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Title</th>
-                                    <th>Reports To</th>
-                                    <th>Username</th>
-                                </tr>
-                                </thead>
-                                <tbody id="employeeTableBody">
-                                {% for employee in employees %}
-                                    <tr data-reports-to="{{ employee.reports_to_name }}">
-                                        <td>{{ employee.employee_id }}</td>
-                                        <td>{{ employee.first_name }}</td>
-                                        <td>{{ employee.last_name }}</td>
-                                        <td>{{ employee.title }}</td>
-                                        <td>{{ employee.reports_to_name }}</td>
-                                        <td>{{ employee.username }}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                     <div>
                         {% if current_user.is_authenticated and current_user.is_admin %}
                         <a href="{{ url_for('main.create_employee') }}" class="btn btn-success btn-block mb-2">
-                            <img src="{{ url_for('static', filename='images/add-user.png') }}" alt="Add"
-                                style="width: 24px; height: 24px;">
+                            <img src="{{ url_for('static', filename='images/add-user.png') }}" alt="Add" style="width: 24px; height: 24px;">
                         </a>
                         {% endif %}
                     </div>
@@ -161,8 +107,7 @@
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col-md-12"
-                style="border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f8f9fa;">
+            <div class="col-md-12" style="border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f8f9fa;">
                 <div class="d-flex justify-content-between mb-2">
                     <script src="{{ url_for('static', filename='javascript/checkout_filter.js') }}"></script>
                     <script>
@@ -176,8 +121,7 @@
                         <button class="btn btn-info" onclick="filterCheckoutTable('closed')">Closed</button>
                     </div>
                     <a href="{{ url_for('main.create_checkout') }}" class="btn btn-success btn-block mb-2">
-                        <img src="{{ url_for('static', filename='images/checkout.png') }}" alt="Add"
-                            style="width: 24px; height: 24px;">
+                        <img src="{{ url_for('static', filename='images/checkout.png') }}" alt="Add" style="width: 24px; height: 24px;">
                     </a>
                 </div>
                 <div class="table-responsive">
@@ -193,8 +137,7 @@
                         </thead>
                         <tbody id="checkoutTableBody">
                             {% for checkout in checkouts %}
-                            <tr
-                                onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
+                            <tr onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
                                 <td>{{ checkout.checkout_id }}</td>
                                 <td>{{ checkout.item_id }}</td>
                                 <td>{{ checkout.employee_id }}</td>
@@ -249,6 +192,7 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
         </div>
         {% endif %}
     </div>
