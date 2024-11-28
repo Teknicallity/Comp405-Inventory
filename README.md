@@ -1,11 +1,26 @@
 # Comp405-Inventory
 
-#### *Currently in Development*
+***Developed for Intro to Databases Systems Course***
+
+This project is designed to manage inventory within a workshop environment. 
+It provides a structured system to track items, employees, and checkouts, while also offering easy access to 
+documentation through QR codes. The system includes an item list for monitoring item details, locations, and statuses, 
+a checkout list for recording who borrowed what and when, and a documentation list for managing important information 
+related to each item.
+
+## Features
+- Item List: Tracks item details, location, and status.
+- Checkout List: Records who checked out items and when they were returned.
+- Employee List: Keep track of leaders and who reports to who.
+- Documentation List: Manages important documentation associated with each item.
+- QR Code Integration: Provides quick access to item and document pages via QR codes.
 
 ## How to Run
 ### Production
 With Docker installed, use the [docker compose file](docker-compose.yaml).\
 Be sure to set `MYSQL_PASSWORD` on both containers and `ADMIN_PASSWORD` for this container.
+
+[Comp405-Inventory on Dockerhub](https://hub.docker.com/r/teknicallity/comp405-inventory)
 
 ### Development
 
@@ -24,3 +39,9 @@ Run the development server:
 flask --app inventory-system --debug run
 ```
 The frontend is now available at http://127.0.0.1:5000
+
+## Technologies Used
+- Backend: Flask
+- Database: MySQL
+- Containerization: Docker
+- Frontend: Bootstrap
