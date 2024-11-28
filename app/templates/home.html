@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block main %}
-<div class="page-container">
     <div class="container">
         {% if current_user.is_authenticated %}
         <div class="row">
@@ -129,8 +128,8 @@
                         <thead>
                             <tr>
                                 <th>Checkout Id</th>
-                                <th>Item Id</th>
-                                <th>Employee Id</th>
+                                <th>Item</th>
+                                <th>Employee</th>
                                 <th>Checkout Date</th>
                                 <th>Return Date</th>
                             </tr>
@@ -139,8 +138,8 @@
                             {% for checkout in checkouts %}
                             <tr onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
                                 <td>{{ checkout.checkout_id }}</td>
-                                <td>{{ checkout.item_id }}</td>
-                                <td>{{ checkout.employee_id }}</td>
+                                <td>{{ checkout.item_name }}</td>
+                                <td>{{ checkout.employee_name }}</td>
                                 <td>{{ checkout.checkout_date }}</td>
                                 <td>{{ checkout.returned_date }}</td>
                             </tr>
@@ -196,5 +195,4 @@
         </div>
         {% endif %}
     </div>
-</div>
 {% endblock %}
