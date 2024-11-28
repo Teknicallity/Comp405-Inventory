@@ -8,35 +8,43 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/main_content.css') }}">
     {% block styles %}{% endblock %}
     <script src="{{ url_for('static', filename='javascript/utils.js') }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-lg bg-white">
+    <nav class="navbar navbar-expand-md bg-white fixed-top py-0 py-md-2">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="{{ url_for('static', filename='images/inventory-logo.jpg') }}" alt="logo" class="img-fluid" style="width: 35px; height: 35px;">
-                {% if current_user.is_authenticated %}
-                    <span class="navbar-text mx-4">Logged in as {{ current_user.username }}</span>
-                {% endif %}
             </a>
+            {% if current_user.is_authenticated %}
+                <span class="navbar-text mx-4">Logged in as {{ current_user.username }}</span>
+            {% endif %}
+
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
+                <div class="navbar-nav d-flex align-items-end">
                     {% if current_user.is_authenticated %}
                         {% if current_user.employee_id %}
-                            <button type="button" class="btn btn-primary mx-1"
+                            <button type="button" class="btn btn-primary mx-1 my-2 my-md-0"
+                                    style="min-width: 120px;"
                                     onclick="window.location.href='{{ url_for('main.employee_details', employee_id=current_user.employee_id) }}'">
                                 My Profile
                             </button>
                         {% endif %}
                         <form action="{{ url_for('auth.logout') }}" method="post" class="d-inline">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            <button type="submit" class="btn btn-danger mx-1">Log Out</button>
+                            <button type="submit" class="btn btn-danger mx-1" style="min-width: 120px;">Log Out</button>
                         </form>
                     {% else %}
-                        <button type="button" class="btn btn-primary mx-1" onclick="window.location.href='{{ url_for('auth.login') }}'">Login</button>
+                        <button type="button" class="btn btn-primary mx-1 my-2 my-md-0" style="min-width: 120px;"
+                                onclick="window.location.href='{{ url_for('auth.login') }}'">
+                            Login
+                        </button>
                     {% endif %}
                 </div>
             </div>
