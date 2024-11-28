@@ -20,8 +20,8 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Brand</th>
-                                <th>Model Number</th>
-                                <th>Serial Number</th>
+                                <th class="d-none d-md-table-cell">Model Number</th>
+                                <th class="d-none d-md-table-cell">Serial Number</th>
                                 <th>Location</th>
                                 <th>Status</th>
                             </tr>
@@ -31,8 +31,8 @@
                                 <tr onclick="window.location.href='{{ url_for('main.item_details', item_id=item.item_id) }}';">
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.brand }}</td>
-                                    <td>{{ item.model }}</td>
-                                    <td>{{ item.serial }}</td>
+                                    <td class="d-none d-md-table-cell">{{ item.model }}</td>
+                                    <td class="d-none d-md-table-cell">{{ item.serial }}</td>
                                     <td>{{ item.location_name }}</td>
                                     <td>{{ item.status_name }}</td>
                                 </tr>
@@ -60,23 +60,23 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>ID</th>
+                                <th class="d-none d-md-table-cell">ID</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Title</th>
                                 <th>Reports To</th>
-                                <th>Username</th>
+                                <th class="d-none d-md-table-cell">Username</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for employee in employees %}
                                 <tr onclick="window.location.href='{{ url_for('main.employee_details', employee_id=employee.employee_id) }}';">
-                                    <td>{{ employee.employee_id }}</td>
+                                    <td class="d-none d-md-table-cell">{{ employee.employee_id }}</td>
                                     <td>{{ employee.first_name }}</td>
                                     <td>{{ employee.last_name }}</td>
                                     <td>{{ employee.title }}</td>
                                     <td>{{ employee.reports_to_name }}</td>
-                                    <td>{{ employee.username }}</td>
+                                    <td class="d-none d-md-table-cell">{{ employee.username }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -96,7 +96,7 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>Checkout Id</th>
+                                <th class="d-none d-md-table-cell">Checkout Id</th>
                                 <th>Item</th>
                                 <th>Employee</th>
                                 <th>Checkout Date</th>
@@ -106,7 +106,7 @@
                             <tbody>
                             {% for checkout in checkouts %}
                                 <tr onclick="window.location.href='{{ url_for('main.checkout_details', checkout_id=checkout.checkout_id) }}';">
-                                    <td>{{ checkout.checkout_id }}</td>
+                                    <td class="d-none d-md-table-cell">{{ checkout.checkout_id }}</td>
                                     <td>{{ checkout.item_name }}</td>
                                     <td>{{ checkout.employee_name }}</td>
                                     <td>{{ checkout.checkout_date }}</td>

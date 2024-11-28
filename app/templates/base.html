@@ -8,20 +8,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/main_content.css') }}">
     {% block styles %}{% endblock %}
     <script src="{{ url_for('static', filename='javascript/utils.js') }}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-md bg-white">
+    <nav class="navbar navbar-expand-md bg-white fixed-top py-0 py-md-2">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="{{ url_for('static', filename='images/inventory-logo.jpg') }}" alt="logo" class="img-fluid" style="width: 35px; height: 35px;">
-                {% if current_user.is_authenticated %}
-                    <span class="navbar-text mx-4">Logged in as {{ current_user.username }}</span>
-                {% endif %}
             </a>
+            {% if current_user.is_authenticated %}
+                <span class="navbar-text mx-4">Logged in as {{ current_user.username }}</span>
+            {% endif %}
+
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                 <div class="navbar-nav d-flex align-items-end">
                     {% if current_user.is_authenticated %}
