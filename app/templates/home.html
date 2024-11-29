@@ -21,7 +21,7 @@
                         <button class="btn btn-info" onclick="filterItemTable('checked-out')">Checked Out</button>
                     </div>
                     <a href="{{ url_for('main.create_item') }}" class="btn btn-success btn-block mb-2">
-                        <img src="{{ url_for('static', filename='images/add-item.png') }}" alt="Add"
+                        <img src="{{ url_for('static', filename='images/add-item-white.png') }}" alt="Add"
                             style="width: 24px; height: 24px;">
                     </a>
                 </div>
@@ -72,7 +72,7 @@
                     <div>
                         {% if current_user.is_authenticated and current_user.is_admin %}
                         <a href="{{ url_for('main.create_employee') }}" class="btn btn-success btn-block mb-2">
-                            <img src="{{ url_for('static', filename='images/add-user.png') }}" alt="Add" style="width: 24px; height: 24px;">
+                            <img src="{{ url_for('static', filename='images/add-user-white.png') }}" alt="Add" style="width: 24px; height: 24px;">
                         </a>
                         {% endif %}
                     </div>
@@ -120,7 +120,7 @@
                         <button class="btn btn-info" onclick="filterCheckoutTable('closed')">Closed</button>
                     </div>
                     <a href="{{ url_for('main.create_checkout') }}" class="btn btn-success btn-block mb-2">
-                        <img src="{{ url_for('static', filename='images/checkout.png') }}" alt="Add" style="width: 24px; height: 24px;">
+                        <img src="{{ url_for('static', filename='images/checkout-white.png') }}" alt="Add" style="width: 24px; height: 24px;">
                     </a>
                 </div>
                 <div class="table-responsive">
