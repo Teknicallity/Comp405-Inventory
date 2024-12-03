@@ -42,7 +42,11 @@ def create_employee():
         password=password,
         is_admin=is_admin
     )
-    new_employee = employee_model.add_employee(employee)
+    try:
+        new_employee = employee_model.add_employee(employee)
+    except ValueError:
+        return abort(422)
+
     return jsonify(new_employee.to_dict()), 201
 
 

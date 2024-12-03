@@ -1,3 +1,4 @@
+import pymysql
 from flask_login import UserMixin
 
 from db.connection import get_db
@@ -44,12 +45,20 @@ def get_all_users():
 def add_user(username, password, is_admin, employee_id=None):
     password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
     db = get_db()
-    with db.cursor() as cursor:
-        cursor.execute(
-            'INSERT INTO users (username, password_hash, is_admin, employee_id) VALUES (%s, %s, %s, %s)',
-            (username, password_hash, is_admin, employee_id)
-        )
-    db.commit()
+    try:
+        with db.cursor() as cursor:
+            cursor.execute(
+                'INSERT INTO users (username, password_hash, is_admin, employee_id) VALUES (%s, %s, %s, %s)',
+                (username, password_hash, is_admin, employee_id)
+            )
+        db.commit()
+    except pymysql.err.IntegrityError as e:
+        if "Duplicate entry" in str(e) and "username" in str(e):
+            db.rollback()
+            raise ValueError("Username already exists.")
+        else:
+            db.rollback()
+            raise
 
 
 def update_user(employee_id, username=None, password=None, is_admin=None):

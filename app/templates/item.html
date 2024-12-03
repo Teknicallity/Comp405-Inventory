@@ -158,7 +158,7 @@
 {% endblock %}
 
 {% block printable %}
-    {% if item and current_user and current_user.is_authenticated %}
+    {% if item %}
         <script src="{{ url_for('static', filename='javascript/checkout.js') }}"></script>
         <script src="{{ url_for('static', filename='javascript/qrcode/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='javascript/qrcode/qrcode.js') }}"></script>
