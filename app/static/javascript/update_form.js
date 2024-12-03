@@ -65,6 +65,8 @@ function toggleEdit(url) {
 
                 } else if (response.status === 401) {
                     flashResponseText('Unauthorized', 'red').then();
+                } else if (response.status === 422) {
+                    flashResponseText('Duplicate entry', 'red').then();
                 } else {
                     flashResponseText('Failed to update.', 'red').then();
                 }
