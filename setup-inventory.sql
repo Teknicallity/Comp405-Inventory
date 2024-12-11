@@ -53,8 +53,8 @@ CREATE TABLE checkouts (
 
 CREATE TABLE documentation (
     documentation_id INT AUTO_INCREMENT PRIMARY KEY,
-    url VARCHAR(100),
-    description VARCHAR(255),
+    url VARCHAR(200),
+    description VARCHAR(50),
     item_id INT,
     FOREIGN KEY (item_id) REFERENCES items (item_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -64,66 +64,57 @@ INSERT INTO locations (name)
     VALUES ('Hand-tool Pegboard'), ('Drill Rack'), ('Charging Station'), ('Paint Station'), ('Electronics Bench'),
            ('Safety Cabinet');
 
-INSERT INTO items (name, serial, location_id) VALUES
-    ('Hammer', 'HT001', 1),
-    ('Screwdriver Set', 'HT002', 1),
-    ('Measuring Tape', 'HT003', 1),
+INSERT INTO items (name, brand, model, serial, location_id) VALUES
+    ('Hammer', 'Milwaukee', '17 oz. Smooth Face', 'HT001', 1),
+    ('Screwdriver Set', 'DeWalt', 'DWHT65201', 'HT002', 1),
+    ('Measuring Tape', 'Stanley', '25ft Powerlock', 'HT003', 1),
 
-    ('Cordless Drill', 'DRL003', 2),
-    ('Skill Saw', 'PT005', 2),
-    ('Nail Gun', 'DRL007', 2),
+    ('Cordless Drill', 'Makita', 'LXT 18V', 'DRL003', 2),
+    ('Skill Saw', 'Bosch', 'CS5 Professional', 'PT005', 2),
+    ('Nail Gun', 'Ryobi', 'ONE+ 18V', 'DRL007', 2),
 
-    ('Battery Pack', 'CHG001', 3),
+    ('Battery Pack', 'Ridgid', 'R87002', 'CHG001', 3),
 
-    ('Sander', 'PT004', 4),
-    ('Paint Brushes Set', 'PT006', 4),
-    ('Paint Cans', 'PT007', 4),
+    ('Sander', 'Black+Decker', 'BDEQS300', 'PT004', 4),
+    ('Paint Brushes Set', 'Purdy', 'PRO-Extra Glide', 'PT006', 4),
+    ('Paint Cans', 'Behr', 'Ultra Pure White', 'PT007', 4),
 
-    ('Multimeter', 'ELE005', 5),
-    ('Wire Cutter', 'ELE006', 5),
-    ('Soldering Iron', 'ELE007', 5),
+    ('Multimeter', 'Fluke', 'FLUKE-117', 'ELE005', 5),
+    ('Wire Cutter', 'Klein Tools', '11055', 'ELE006', 5),
+    ('Soldering Iron', 'Weller', 'WE1010NA', 'ELE007', 5),
 
-    ('Safety Goggles', 'SFT001', 6),
-    ('Respirator Mask', 'SFT002', 6),
-    ('First Aid Kit', 'SFT003', 6);
+    ('Safety Goggles', '3M', 'Virtua CCS', 'SFT001', 6),
+    ('Respirator Mask', 'Honeywell', 'RU8500', 'SFT002', 6);
 
 INSERT INTO documentation (url, description, item_id) VALUES
-    ('https://example.com/hammer-guide', 'Hammer user guide', 1),
-    ('https://example.com/hammer-tips', 'Hammer usage tips', 1),
+    ('https://www.homedepot.com/p/Milwaukee-17-oz-Smooth-Face-Framing-Hammer-48-22-9017/301688587', 'Home Depot Shop', 1),
+    ('https://www.homedepot.com/p/DEWALT-Phillips-Screwdriver-Set-10-Piece-DWHT65201/317264613', 'Home Depot Shopping', 2),
+    ('https://images.thdstatic.com/catalog/pdfImages/62/62d40ab8-7fbc-43b6-91d8-2171f5361483.pdf', 'Warranty', 3),
 
-    ('https://example.com/screwdriver-guide', 'Screwdriver instructions', 2),
-    ('https://example.com/screwdriver-set-maintenance', 'Maintenance tips', 2),
+    ('https://images.thdstatic.com/catalog/pdfImages/5d/5d92752f-2ad8-464e-82c2-1d9490eacd4a.pdf', 'Drill Manual', 4),
+    ('https://images.thdstatic.com/catalog/pdfImages/18/18cc4b70-f559-4da4-a5f6-b47281645125.pdf', 'Safety/Warranty', 4),
 
-    ('https://example.com/measuring-tape', 'Measurement guide', 3),
+    ('https://www.manualslib.com/manual/537912/Bosch-Cs5.html?page=2#manual', 'Safety Guide', 5),
+    ('https://www.manualslib.com/manual/537912/Bosch-Cs5.html?page=12#manual', 'Maintenance Manual', 5),
 
-    ('https://example.com/drill-setup', 'Setup instructions', 4),
-    ('https://example.com/drill-safety', 'Drill safety tips', 4),
+    ('https://images.thdstatic.com/catalog/pdfImages/3d/3d35f81c-42b0-4544-b07c-34207230191e.pdf', 'Operators Manual', 6),
+    ('https://images.thdstatic.com/catalog/pdfImages/e3/e3e57198-567f-4e5f-8fd3-a55a115a938f.pdf', 'Warranty', 6),
 
-    ('https://example.com/saw-guide', 'Saw instructions', 5),
+    ('https://images.thdstatic.com/catalog/pdfImages/98/983bc60d-ec20-4efb-babc-2e5360981263.pdf', 'Warranty', 7),
 
-    ('https://example.com/nail-gun', 'Nail gun guide', 6),
-    ('https://example.com/nail-gun-safety', 'Safety instructions', 6),
+    ('https://www.toolservicenet.com/i/BLACK_DECKER/GLOBALBOM/QU/BDEQS300/1/Instruction_Manual/EN/90611851_BDEQS300.pdf', 'Setup guide', 8),
 
-    ('https://example.com/battery-pack', 'Charging instructions', 7),
+    ('https://www.purdy.com/en/products/brushes/pro-extra-glide', 'Cleaning instructions', 9),
 
-    ('https://example.com/sander-setup', 'Setup guide', 8),
-    ('https://example.com/sander-maintenance', 'Maintenance tips', 8),
+    ('https://www.behr.com/consumer/ColorDetailView/1850', 'Storage guidelines', 10),
 
-    ('https://example.com/paint-brushes', 'Cleaning instructions', 9),
+    ('https://dam-assets.fluke.com/s3fs-public/110__117umeng0000_0.pdf?VersionId=kuO8Q80mS6nSqKkZOd2JFMEnAStiGspq', 'Multimeter usage', 11),
+    ('https://dam-assets.fluke.com/s3fs-public/11x_____sseng0000.pdf?VersionId=h.Kf.gNRgkiaNYXWydWjMYEqh19.Gihk', 'Safety precautions', 11),
 
-    ('https://example.com/paint-cans', 'Storage guidelines', 10),
+    ('https://www.kleintools.com/catalog/combination-cutting-tools/high-visibility-klein-kurve-wire-stripper-cutter', 'Compliance', 12),
 
-    ('https://example.com/multimeter-guide', 'Multimeter usage', 11),
-    ('https://example.com/multimeter-safety', 'Safety precautions', 11),
+    ('https://www.weller-tools.com/sites/default/files/products/documents/WEL_DSX80_120_DXV80_OI_T0055687210_web.pdf', 'Soldering guide', 13),
 
-    ('https://example.com/wire-cutter', 'Wire cutter tips', 12),
+    ('https://multimedia.3m.com/mws/mediawebserver?mwsId=SSSSSu9n_zu8l00xNx_UoY_vnv70k17zHvu9lxtD7xt1evSSSSSS-', 'Regulatory Data Sheet', 14),
 
-    ('https://example.com/soldering-iron', 'Soldering guide', 13),
-
-    ('https://example.com/safety-goggles', 'Safety instructions', 14),
-    ('https://example.com/safety-tips', 'General safety tips', 14),
-
-    ('https://example.com/respirator-mask', 'Respirator usage', 15),
-
-    ('https://example.com/first-aid', 'First aid instructions', 16),
-    ('https://example.com/emergency-tips', 'Emergency usage tips', 16);
+    ('https://www.honeywellstore.com/store/products/honeywell-mc-p100-multi-purpose-half-mask-respirator-rws-54032.htm', 'Respirator Shop page', 15);
