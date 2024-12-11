@@ -32,7 +32,7 @@
                                 <th>Name</th>
                                 <th>Brand</th>
                                 <th class="d-none d-md-table-cell">Model Number</th>
-                                <th class="d-none d-md-table-cell">Serial Number</th>
+                                <th class="d-none d-lg-table-cell d-xl-none">Serial Number</th>
                                 <th>Location</th>
                                 <th>Status</th>
                             </tr>
@@ -40,11 +40,11 @@
                         <tbody id="itemTableBody">
                             {% for item in items %}
                                 <tr onclick="window.location.href='{{ url_for('main.item_details', item_id=item.item_id) }}';">
-                                    <td>{{ item.name }}</td>
+                                    <td class="text-truncate">{{ item.name }}</td>
                                     <td>{{ item.brand }}</td>
-                                    <td class="d-none d-md-table-cell">{{ item.model }}</td>
-                                    <td class="d-none d-md-table-cell">{{ item.serial }}</td>
-                                    <td>{{ item.location_name }}</td>
+                                    <td class="d-none d-md-table-cell text-truncate">{{ item.model }}</td>
+                                    <td class="d-none d-lg-table-cell d-xl-none">{{ item.serial }}</td>
+                                    <td class="text-truncate">{{ item.location_name }}</td>
                                     <td>{{ item.status_name }}</td>
                                 </tr>
                             {% endfor %}
