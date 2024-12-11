@@ -22,14 +22,14 @@ chown -R www-data: /etc/comp405-inventory/app/static
 
 chown www-data: /etc/comp405-inventory
 
-flask --app inventory-system init-db
+python3 -m flask --app inventory-system init-db
 
 if str_to_bool "$RESET_ON_RESTART"; then
-  flask --app inventory-system reset -y
+  python3 -m flask --app inventory-system reset -y
 elif str_to_bool "$CLEAR_DB_ON_RESTART"; then
-  flask --app inventory-system init-db -r
+  python3 -m flask --app inventory-system init-db -r
 fi
 
-flask --app inventory-system ensure-admin
+python3 -m flask --app inventory-system ensure-admin
 
 exec uwsgi --http :"$SERVER_PORT" --ini uwsgi.ini
