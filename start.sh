@@ -16,12 +16,6 @@ str_to_bool() {
 
 SERVER_PORT="${SERVER_PORT:-8198}"
 
-mkdir -p /etc/comp405-inventory/app/static
-
-chown -R www-data: /etc/comp405-inventory/app/static
-
-chown www-data: /etc/comp405-inventory
-
 python3 -m flask --app inventory-system init-db
 
 if str_to_bool "$RESET_ON_RESTART"; then

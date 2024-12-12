@@ -4,8 +4,10 @@ LABEL authors="Teknicallity"
 
 ENV PYTHONUNBUFFERED=1
 
-# Install build tools
-RUN apt-get -y update && apt-get -y install build-essential
+# Install build tools and clean up after
+RUN apt-get -y update && \
+    apt-get -y install build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 
@@ -14,10 +16,7 @@ COPY requirements.txt requirements.txt
 # Install python dependencies
 RUN python -m venv --copies /build/.venv && \
     /build/.venv/bin/pip install --upgrade pip wheel --no-cache-dir && \
-    /build/.venv/bin/pip install --no-cache-dir -r requirements.txt && \
-    /build/.venv/bin/pip install --no-cache-dir 'uWSGI>=2.0.28'
-
-COPY . .
+    /build/.venv/bin/pip install --no-cache-dir -r requirements.txt 'uWSGI>=2.0.28'
 
 
 # Stage 2: Runtime stage
@@ -28,17 +27,18 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /etc/comp405-inventory
 
-# Copy build stage libraries
+# Copy build stage libraries and files
 COPY --from=build /build/.venv /etc/comp405-inventory/.venv
-COPY --from=build /build /etc/comp405-inventory
+COPY . .
 
 ENV VIRTUAL_ENV=/etc/comp405-inventory/.venv
 ENV PATH=/etc/comp405-inventory/.venv/bin:$PATH
 
 # Fix Permissions
-RUN chmod g+w . && \
-    chmod +x /etc/comp405-inventory/start.sh && \
+RUN chmod +x /etc/comp405-inventory/start.sh && \
     sed -i 's/\r$//' /etc/comp405-inventory/start.sh
+
+USER www-data
 
 EXPOSE 8198
 
