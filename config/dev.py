@@ -8,7 +8,7 @@ class DevConfig(BaseConfig):
     MYSQL_PORT = 3306
     MYSQL_USER = 'root'
     MYSQL_PASSWORD = 'password'
-    MYSQL_DATABASE = 'inventory_system'
+    MYSQL_DATABASE = 'inventory_system'  # Accidentally hardcoded this. Do not change
 
     ADMIN_USER = 'root'
     ADMIN_PASSWORD = 'password'

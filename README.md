@@ -24,7 +24,17 @@ Be sure to set `MYSQL_PASSWORD` on both containers and `ADMIN_PASSWORD` for this
 
 ### Development
 
-To completely recreate the database (add `-y` to override prompt):
+Create a python virtual environment and install dependencies:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r requirements.txt
+```
+
+The program looks for a default MySQL database at `localhost:3306` with user `root` and password `password`.
+To change this, edit [./config/dev.py](config/dev.py).
+
+To completely recreate the database instance (add `-y` to override prompt):
 ```bash
 flask --app inventory-system reset
 ```
