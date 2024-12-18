@@ -32,12 +32,13 @@ python3 -m pip install -r requirements.txt
 ```
 
 The program looks for a default MySQL database at `localhost:3306` with user `root` and password `password`.
-To change this, edit [./config/dev.py](config/dev.py).
+To change this, edit [config/dev.py](config/dev.py).
 
 To completely recreate the database instance (add `-y` to override prompt):
 ```bash
 flask --app inventory-system reset
 ```
+This will create employees and their respective user accounts defined in [employees.csv](./employees.csv)
 
 Also take a look at the help menu for more commands:
 ```bash
