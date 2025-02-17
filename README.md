@@ -15,6 +15,12 @@ related to each item.
 - Documentation List: Manages important documentation associated with each item.
 - QR Code Integration: Provides quick access to item and document pages via QR codes.
 
+## Images
+
+![Home Page Entry](/docs/images/home_page.png)
+![Item Entry](/docs/images/item_entry.png)
+
+
 ## How to Run
 ### Production
 With Docker installed, use the [docker compose file](docker-compose.yaml).\
